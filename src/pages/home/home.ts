@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { NewsService } from './news.service'
-import { News } from './news'
-
+import { NewsProvider } from '../../providers/news.provider'
+import { News } from '../../providers/news'
 import { NavController } from 'ionic-angular';
 
 @Component({
   templateUrl: 'home.html',
-  providers: [NewsService],
+  providers: [NewsProvider],
 })
 export class HomePage implements OnInit {
   news: News[];
   errorMessage: string = '';
 
-  constructor(public navCtrl: NavController, private newsService: NewsService) {
+  constructor(public navCtrl: NavController, private newsProvider: NewsProvider) {
 
   }
 
   getNews(): void {
-    this.newsService.getAll().subscribe(
+    this.newsProvider.getAll().subscribe(
          /* happy path */ n => this.news = n,
          /* error path */ e => this.errorMessage = e);
   }

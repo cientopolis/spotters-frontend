@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { News } from './news';
+import { constants } from '../app/app.constants';
 
 import 'rxjs/Rx';
 
 @Injectable()
-export class NewsService {
-    private newsUrl = 'http://localhost:3000/api/v1/news.json';  // URL to web api
+export class NewsProvider {
+    private newsUrl = `${constants.endpoint}/news.json`;  // URL to web api
 
     constructor(private http: Http) {
 

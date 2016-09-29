@@ -1,18 +1,24 @@
-<!--
-  Generated template for the Candidates page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>candidates</ion-title>
+    <ion-title>Spotters - Candidatos</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-
 <ion-content padding>
-
+  <ion-card *ngFor="let candidate of candidates">
+    <img [src]="getUrl(candidate)" />
+    <ion-card-content>
+      <ion-card-title *ngFor="let classification of candidate.classifications">
+        <div *ngFor="let task of classification.data">
+          <p>{{task.task_id}}</p>
+          <p>{{task.answers}}</p>
+        </div>
+      </ion-card-title>
+      <p>
+        The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
