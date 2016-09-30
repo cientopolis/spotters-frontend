@@ -19,12 +19,12 @@ export class CandidatesProvider {
   }
 
   getAll(): Observable<Candidate[]> {
-    let news$ = this.http
+    let candidates$ = this.http
       .get(this.candidatesUrl, { headers: this.getHeaders() })
       .map(mapCandidates)
       .catch(handleError);
 
-    return news$;
+    return candidates$;
   }
 
   private getHeaders() {
@@ -58,7 +58,7 @@ function mapVotes(r: any): Vote[] {
 }
 
 function toCandidate(r: any): Candidate {
-  let news = <Candidate>({
+  let candidate = <Candidate>({
     id: r.id,
     status: r.status,
     heading: r.heading,
@@ -71,7 +71,7 @@ function toCandidate(r: any): Candidate {
     messages: mapMessages(r.messages),
     createdAt: r.created_at
   });
-  return news;
+  return candidate;
 }
 
 function toUser(r: any): User {

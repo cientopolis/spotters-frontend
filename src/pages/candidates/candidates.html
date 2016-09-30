@@ -8,17 +8,44 @@
 
 <ion-content padding>
   <ion-card *ngFor="let candidate of candidates">
+    <ion-item>
+      <ion-icon name="person" item-left></ion-icon>
+      <h2>{{candidate.owner.name}}</h2>
+    </ion-item>
+
     <img [src]="getUrl(candidate)" />
+
     <ion-card-content>
-      <ion-card-title *ngFor="let classification of candidate.classifications">
+      <ion-item *ngFor="let classification of candidate.classifications">
         <div *ngFor="let task of classification.data">
-          <p>{{task.task_id}}</p>
-          <p>{{task.answers}}</p>
+          <p class="task-question">{{getTask(task.question).content.question}}</p>
+          <p>{{task.answer}}</p>
         </div>
-      </ion-card-title>
-      <p>
-        The most popular industrial group ever, and largely responsible for bringing the music to a mass audience.
-      </p>
+      </ion-item>
+
+      <ion-item [hidden]="!canShowMessages(candidate)">
+        <div *ngFor="let message of candidate.messages">
+          <ion-row>
+            <ion-col icon-left>
+              <ion-icon name="person"></ion-icon>
+              {{message.user.name}}
+            </ion-col>
+            <ion-col item-right>
+              {{message.createdAt | date}}
+            </ion-col>
+          </ion-row>
+          {{message.text}}
+        </div>
+      </ion-item>
     </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-left (click)="showMessages(candidate)">
+          <ion-icon name="mail"></ion-icon>
+          Mensajes
+        </button>
+      </ion-col>
+    </ion-row>
   </ion-card>
 </ion-content>

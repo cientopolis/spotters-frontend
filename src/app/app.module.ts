@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { NewsProvider } from '../providers/news.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
+import { WorkflowsProvider } from '../providers/workflows.provider';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { CandidatesProvider } from '../providers/candidates.provider';
   ],
   providers: [
     NewsProvider,
-    CandidatesProvider
+    CandidatesProvider,
+    WorkflowsProvider
   ]
 })
 export class AppModule {}

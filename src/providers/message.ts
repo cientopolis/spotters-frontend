@@ -6,4 +6,5 @@ export interface Message {
     text: string;
     user: User;
     votes: Vote[];
+    createdAt: Date;
 }
