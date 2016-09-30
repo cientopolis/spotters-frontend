@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
-import { MyApp } from './app.component';
+import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
 import { PanoramaPage } from '../pages/panorama/panorama';
 import { CandidatesPage } from '../pages/candidates/candidates';
@@ -10,10 +10,11 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { NewsProvider } from '../providers/news.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
+import { CurrentLocationService } from '../utils/currentLocation.service';
 
 @NgModule({
   declarations: [
-    MyApp,
+    SpottersApp,
     MapPage,
     PanoramaPage,
     CandidatesPage,
@@ -22,11 +23,11 @@ import { WorkflowsProvider } from '../providers/workflows.provider';
     TabsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(SpottersApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    SpottersApp,
     MapPage,
     PanoramaPage,
     CandidatesPage,
@@ -37,7 +38,8 @@ import { WorkflowsProvider } from '../providers/workflows.provider';
   providers: [
     NewsProvider,
     CandidatesProvider,
-    WorkflowsProvider
+    WorkflowsProvider,
+    CurrentLocationService
   ]
 })
 export class AppModule {}

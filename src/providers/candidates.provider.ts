@@ -6,6 +6,7 @@ import { User } from './user';
 import { Classification } from './classification';
 import { Message } from './message';
 import { Vote } from './vote';
+import { CurrentLocationService } from '../utils/currentLocation.service';
 import { constants } from '../app/app.constants';
 
 import 'rxjs/Rx';
@@ -14,13 +15,14 @@ import 'rxjs/Rx';
 export class CandidatesProvider {
   private candidatesUrl = `${constants.endpoint}/candidates.json`;  // URL to web api
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private currentLocation: CurrentLocationService) {
 
   }
 
-  getAll(): Observable<Candidate[]> {
+  getAll(latlng): Observable<Candidate[]> {
     let candidates$ = this.http
-      .get(this.candidatesUrl, { headers: this.getHeaders() })
+      //.get(`${this.candidatesUrl}?lat=${latlng.lat}&lng=${latlng.lng}`, { headers: this.getHeaders() })
+      .get(`${this.candidatesUrl}`, { headers: this.getHeaders() })
       .map(mapCandidates)
       .catch(handleError);
 

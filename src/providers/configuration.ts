@@ -1,7 +1,10 @@
 export class Configuration {
-    center: {
-        coordinates: [number]
-    };
-
-    defaultZoom: number;
+    id: number;
+    title: string;
+    lat: number;
+    lng: number;
+    zoom: number;
+    headingCenter: number;
+    pitchCenter: number;
+    proximityDistance: number;
 }

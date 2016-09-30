@@ -26,14 +26,11 @@
       <ion-item [hidden]="!canShowMessages(candidate)">
         <div *ngFor="let message of candidate.messages">
           <ion-row>
-            <ion-col icon-left>
-              <ion-icon name="person"></ion-icon>
-              {{message.user.name}}
-            </ion-col>
             <ion-col item-right>
               {{message.createdAt | date}}
             </ion-col>
           </ion-row>
+          <ion-badge color="secondary">{{message.user.name}}</ion-badge>
           {{message.text}}
         </div>
       </ion-item>
