@@ -30,25 +30,26 @@ export class PanoramaPage implements OnInit {
         pitch: this.currentLocation.pitch
       }
     });
+
+    //console.log(this.panorama);
   }
 
   public getConfiguration(): void {
-    console.log('entro al LAT');
-    console.log(this.currentLocation);
-
     this.configurationProvider.getAll().subscribe(
       c => {
         this.configuration = _.first(c);
 
         if (this.currentLocation.isBlank()) {
           console.log('its blank');
-          console.log(this.configuration);
+          console.log(this.currentLocation);
           this.currentLocation.lat = this.configuration.lat;
           this.currentLocation.lng = this.configuration.lng;
           this.currentLocation.heading = this.configuration.headingCenter;
           this.currentLocation.pitch = this.configuration.pitchCenter;
           this.currentLocation.refresh = true;
         }
+
+        console.log(this.currentLocation);
         this.setPanorama();
       },
       e => this.errorMessage = e);

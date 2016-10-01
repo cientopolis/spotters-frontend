@@ -92,12 +92,14 @@ export class MapPage implements OnInit {
         this.map = new google.maps.Map(document.getElementById("gmap"), mapProp);
 
         let panoramaProp = {
-            position: mapProp.center,
+            position: new google.maps.LatLng(this.currentLocation.lat, this.currentLocation.lng),
             pov: {
                 heading: this.currentLocation.heading,
                 pitch: this.currentLocation.pitch
             }
         }
+
+        console.log(panoramaProp);
 
         this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'), panoramaProp);
 
