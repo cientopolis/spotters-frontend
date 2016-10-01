@@ -45,8 +45,8 @@ function toConfiguration(r: any): Configuration {
     let configuration = <Configuration>({
         id: r.id,
         title: r.title,
-        lat: r.lat,
-        lng: r.lng,
+        lat: r.center.lat,
+        lng: r.center.lng,
         zoom: r.zoom,
         headingCenter: r.heading_center,
         pitchCenter: r.pitch_center,
