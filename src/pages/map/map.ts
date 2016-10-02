@@ -14,7 +14,7 @@ declare var google: any;
 @Component({
     selector: 'page-map',
     templateUrl: 'map.html',
-    providers: [ConfigurationProvider, CandidatesProvider, CurrentLocationService]
+    providers: [ConfigurationProvider, CandidatesProvider]
 })
 export class MapPage implements OnInit {
     map: any;
@@ -26,7 +26,7 @@ export class MapPage implements OnInit {
     errorMessage: string;
     markers: any[] = [];
 
-    constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, private currentLocation: CurrentLocationService) {
+    constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, public currentLocation: CurrentLocationService) {
 
     }
 
@@ -98,9 +98,6 @@ export class MapPage implements OnInit {
                 pitch: this.currentLocation.pitch
             }
         }
-
-        console.log(panoramaProp);
-
         this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'), panoramaProp);
 
         this.map.setStreetView(this.panorama);

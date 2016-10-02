@@ -1,5 +1,9 @@
 import _ from 'lodash';
+import { Injectable } from '@angular/core';
 
+import 'rxjs/Rx';
+
+@Injectable()
 export class CurrentLocationService {
     lat: number = null;
     lng: number = null;

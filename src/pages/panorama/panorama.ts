@@ -1,3 +1,7 @@
+import { Workflow } from '../../providers/workflow';
+import { WorkflowsProvider } from '../../providers/workflows.provider';
+import { Task } from '../../providers/task';
+
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
@@ -10,17 +14,27 @@ import { ConfigurationProvider } from '../../providers/configuration.provider';
 import _ from "lodash";
 
 declare var google: any;
+
 @Component({
   selector: 'page-panorama',
   templateUrl: 'panorama.html',
-  providers: [ConfigurationProvider, CurrentLocationService]
+  providers: [ConfigurationProvider, WorkflowsProvider]
 })
 export class PanoramaPage implements OnInit {
   panorama: any;
   configuration: Configuration;
   errorMessage: string;
+  tasks: any;
+  current_task: any;
+  initialice_workflow: Boolean;
 
-  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, private currentLocation: CurrentLocationService) { }
+  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflow: WorkflowsProvider) {
+
+  }
+
+  public capture(): void {
+    this.initialice_workflow = true;
+  }
 
   public setPanorama(): void {
     this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'), {
@@ -30,18 +44,13 @@ export class PanoramaPage implements OnInit {
         pitch: this.currentLocation.pitch
       }
     });
-
-    //console.log(this.panorama);
   }
 
   public getConfiguration(): void {
     this.configurationProvider.getAll().subscribe(
       c => {
         this.configuration = _.first(c);
-
         if (this.currentLocation.isBlank()) {
-          console.log('its blank');
-          console.log(this.currentLocation);
           this.currentLocation.lat = this.configuration.lat;
           this.currentLocation.lng = this.configuration.lng;
           this.currentLocation.heading = this.configuration.headingCenter;
@@ -49,13 +58,34 @@ export class PanoramaPage implements OnInit {
           this.currentLocation.refresh = true;
         }
 
-        console.log(this.currentLocation);
         this.setPanorama();
       },
       e => this.errorMessage = e);
   }
 
+  public getWorkflow(): void {
+
+  }
+
+  /*public getNextTask(current): void {
+    let task = _.find(this.tasks, task => {
+      return task.id == 3
+    });
+
+    this.current_task = task;
+  }*/
+
   ngOnInit(): void {
+    this.initialice_workflow = false;
     this.getConfiguration();
+
+    this.workflow.getAll().subscribe(
+      w => {
+        this.tasks = _.first(w).tasks;
+        this.current_task = _.first(this.tasks);
+        //console.log(this.current_task);
+        //console.log('ahora');
+        //console.log(this.current_task.widgetType)
+      })
   }
 }

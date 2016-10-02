@@ -16,12 +16,12 @@ export class WorkflowsProvider {
   }
 
   getAll(): Observable<Workflow[]> {
-    let news$ = this.http
+    let observable$ = this.http
       .get(this.workflowsUrl, { headers: this.getHeaders() })
       .map(mapWorkflows)
       .catch(handleError);
 
-    return news$;
+    return observable$;
   }
 
   private getHeaders() {

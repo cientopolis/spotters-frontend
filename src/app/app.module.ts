@@ -11,6 +11,7 @@ import { NewsProvider } from '../providers/news.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
+import { TextDirective } from '../directives/text.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CurrentLocationService } from '../utils/currentLocation.service';
     CandidatesPage,
     ProfilePage,
     HomePage,
-    TabsPage
+    TabsPage,
+    TextDirective
   ],
   imports: [
     IonicModule.forRoot(SpottersApp)
@@ -42,4 +44,4 @@ import { CurrentLocationService } from '../utils/currentLocation.service';
     CurrentLocationService
   ]
 })
-export class AppModule {}
+export class AppModule { }

@@ -8,7 +8,6 @@ import { Message } from './message';
 import { Vote } from './vote';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { constants } from '../app/app.constants';
-
 import 'rxjs/Rx';
 
 @Injectable()
