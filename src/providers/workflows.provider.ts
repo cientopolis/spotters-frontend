@@ -51,6 +51,7 @@ function toWorkflow(r: any): Workflow {
     id: r.id,
     name: r.name,
     tasks: mapTasks(r.tasks),
+    firstTask: toTask(r.first_task),
     createdAt: r.created_at
   });
   return workflow;

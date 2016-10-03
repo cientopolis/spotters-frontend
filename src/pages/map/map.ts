@@ -98,7 +98,7 @@ export class MapPage implements OnInit {
                 pitch: this.currentLocation.pitch
             }
         }
-        this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'), panoramaProp);
+        this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview1'), panoramaProp);
 
         this.map.setStreetView(this.panorama);
 

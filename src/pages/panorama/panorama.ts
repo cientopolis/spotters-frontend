@@ -24,11 +24,11 @@ export class PanoramaPage implements OnInit {
   panorama: any;
   configuration: Configuration;
   errorMessage: string;
-  tasks: any;
-  current_task: any;
+  current_task: Task;
   initialice_workflow: Boolean;
+  workflow: Workflow;
 
-  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflow: WorkflowsProvider) {
+  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider) {
 
   }
 
@@ -37,7 +37,7 @@ export class PanoramaPage implements OnInit {
   }
 
   public setPanorama(): void {
-    this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview'), {
+    this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview2'), {
       position: new google.maps.LatLng(this.currentLocation.lat, this.currentLocation.lng),
       pov: {
         heading: this.currentLocation.heading,
@@ -79,10 +79,11 @@ export class PanoramaPage implements OnInit {
     this.initialice_workflow = false;
     this.getConfiguration();
 
-    this.workflow.getAll().subscribe(
+    this.workflowProvider.getAll().subscribe(
       w => {
-        this.tasks = _.first(w).tasks;
-        this.current_task = _.first(this.tasks);
+        this.workflow = _.first(w);
+        this.current_task = this.workflow.firstTask;
+        // this.current_task = _.first(this.tasks);
         //console.log(this.current_task);
         //console.log('ahora');
         //console.log(this.current_task.widgetType)
