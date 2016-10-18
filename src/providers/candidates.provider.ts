@@ -18,7 +18,7 @@ export class CandidatesProvider {
 
   }
 
-  getAll(latlng): Observable<Candidate[]> {
+  getAll(latlng?): Observable<Candidate[]> {
     let candidates$ = this.http
       //.get(`${this.candidatesUrl}?lat=${latlng.lat}&lng=${latlng.lng}`, { headers: this.getHeaders() })
       .get(`${this.candidatesUrl}`, { headers: this.getHeaders() })
