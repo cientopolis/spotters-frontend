@@ -36,7 +36,7 @@ export class PanoramaPage implements OnInit {
     this.initialice_workflow = true;
   }
 
-  public setPanorama(): void {
+  /*public setPanorama(): void {
     this.panorama = new google.maps.StreetViewPanorama(document.getElementById('streetview2'), {
       position: new google.maps.LatLng(this.currentLocation.lat, this.currentLocation.lng),
       pov: {
@@ -65,7 +65,7 @@ export class PanoramaPage implements OnInit {
 
   public getWorkflow(): void {
 
-  }
+  }*/
 
   /*public getNextTask(current): void {
     let task = _.find(this.tasks, task => {
@@ -76,10 +76,10 @@ export class PanoramaPage implements OnInit {
   }*/
 
   ngOnInit(): void {
-    this.initialice_workflow = false;
-    this.getConfiguration();
+    // this.initialice_workflow = false;
+    // this.getConfiguration();
 
-    this.workflowProvider.getAll().subscribe(
+    /*this.workflowProvider.getAll().subscribe(
       w => {
         this.workflow = _.first(w);
         this.current_task = this.workflow.firstTask;
@@ -87,6 +87,6 @@ export class PanoramaPage implements OnInit {
         //console.log(this.current_task);
         //console.log('ahora');
         //console.log(this.current_task.widgetType)
-      })
+      })*/
   }
 }

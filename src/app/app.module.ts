@@ -12,6 +12,8 @@ import { CandidatesProvider } from '../providers/candidates.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { TextDirective } from '../directives/text.directive';
+import { PanoramaComponent } from '../utils/panorama.component';
+import { MapaComponent } from '../utils/mapa.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { TextDirective } from '../directives/text.directive';
     ProfilePage,
     HomePage,
     TabsPage,
-    TextDirective
+    TextDirective,
+    PanoramaComponent,
+    MapaComponent
   ],
   imports: [
     IonicModule.forRoot(SpottersApp)

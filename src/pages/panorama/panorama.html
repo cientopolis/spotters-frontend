@@ -13,28 +13,5 @@
 
 
 <ion-content padding>
-  <div *ngIf="current_task">
-    <!--{{current_task.id}}-->
-  </div>
-
-  <div id="streetview2" *ngIf="!initialice_workflow"></div>
-  <ion-buttons start>
-    <button ion-button icon-only (click)="capture()">
-        <ion-icon ></ion-icon>
-      </button>
-  </ion-buttons>
-
-
-
-
-  <!--<div [ngSwitch]="current_task.widgetType">
-    <template [ngSwitchCase]="'choice'">
-      Es un choice
-    </template>
-    <template [ngSwitchCase]="'text'">
-      <input text_question value="prueba" />
-    </template>
-    <template ngSwitchDefault>Unknown</template>
-  </div>-->
-
+  <streetview [fix]="2"></streetview>
 </ion-content>
