@@ -6,15 +6,14 @@ import { OnInit } from '@angular/core';
 import { Configuration } from '../providers/configuration';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { Subscription } from 'rxjs/Subscription';
+import { GoogleMapsLoader } from './mapLoader';
 
 import _ from "lodash";
-
-declare var google: any;
 
 @Component({
     selector: 'streetview',
     template: '<div class="street" id="streetview_{{fix}}"></div>',
-    providers: [ConfigurationProvider]
+    providers: [ConfigurationProvider, GoogleMapsLoader]
 })
 export class PanoramaComponent implements OnInit {
     @Input() fix: string;
@@ -23,8 +22,10 @@ export class PanoramaComponent implements OnInit {
     errorMessage: string;
     lat: number;
     subscription: Subscription;
+    mapLoader: GoogleMapsLoader;
 
-    constructor(private configurationProvider: ConfigurationProvider, private currentLocation: CurrentLocationService) {
+    constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private currentLocation: CurrentLocationService) {
+        this.mapLoader = mapLoader;
         this.subscription = currentLocation.lat$.subscribe(
             lat => {
                 if (lat) {
@@ -35,19 +36,29 @@ export class PanoramaComponent implements OnInit {
     }
 
     public movePanorama(): void {
-        if (this.panorama) {
-            this.panorama.setPosition(new google.maps.LatLng(this.lat, this.currentLocation.lng))
-        }
+        GoogleMapsLoader.load()
+            .then((_mapsApi) => {
+                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
+                if (this.panorama) {
+                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.currentLocation.lng))
+                }
+
+            });
     }
 
     public setPanorama(): void {
-        this.panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
-            position: new google.maps.LatLng(this.lat, this.currentLocation.lng),
-            pov: {
-                heading: this.currentLocation.heading,
-                pitch: this.currentLocation.pitch
-            }
-        });
+        GoogleMapsLoader.load()
+            .then((_mapsApi) => {
+                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
+                this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
+                    position: new _mapsApi.LatLng(this.lat, this.currentLocation.lng),
+                    pov: {
+                        heading: this.currentLocation.heading,
+                        pitch: this.currentLocation.pitch
+                    }
+                });
+
+            });
     }
 
     public getConfiguration(): void {
@@ -75,6 +86,6 @@ export class PanoramaComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        //   this.getConfiguration();
+        this.getConfiguration();
     }
 }

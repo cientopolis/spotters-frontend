@@ -28,7 +28,6 @@ export class MapaComponent implements OnInit {
     errorMessage: string;
     markers: any[] = [];
     mapLoader: GoogleMapsLoader;
-    geocoder: any;
 
     constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, public currentLocationService: CurrentLocationService) {
         this.mapLoader = mapLoader;
@@ -58,7 +57,6 @@ export class MapaComponent implements OnInit {
         this.clearMarkers()
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
                 _.each(this.candidates, candidate => {
                     this.markers.push(new _mapsApi.Marker({
                         position: new _mapsApi.LatLng(candidate.lat, candidate.lng),
@@ -97,8 +95,6 @@ export class MapaComponent implements OnInit {
     setMap() {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
-
                 let mapProp = {
                     center: new _mapsApi.LatLng(this.lat, this.configuration.lng),
                     zoom: this.configuration.zoom,
