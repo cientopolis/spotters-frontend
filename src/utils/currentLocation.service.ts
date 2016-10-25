@@ -6,13 +6,14 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class CurrentLocationService {
     private _lat = new BehaviorSubject<number>(null);
-
-    lng: number = null;
-    heading: number = null;
-    pitch: number = null;
-    refresh: boolean = false;
+    private _lng = new BehaviorSubject<number>(null);
+    private _heading = new BehaviorSubject<number>(null)
+    private _pitch = new BehaviorSubject<number>(null);
 
     lat$ = this._lat.asObservable();
+    lng$ = this._lng.asObservable();
+    heading$ = this._heading.asObservable();
+    pitch$ = this._pitch.asObservable();
 
     getLat(): number {
         return this._lat.getValue();
@@ -22,45 +23,31 @@ export class CurrentLocationService {
         this._lat.next(lat);
     }
 
-    isBlank() {
-        return _.isNull(this.lng) && _.isNull(this.heading) && _.isNull(this.pitch);
+    getLng(): number {
+        return this._lng.getValue();
     }
-}
 
+    setLng(lng: number): void {
+        this._lng.next(lng);
+    }
 
-/*
-import _ from 'lodash';
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
+    getHeading(): number {
+        return this._heading.getValue();
+    }
 
-@Injectable()
-export class CurrentLocationService {
-    private _lat = new Subject<number>();
-    lng: number = null;
-    heading: number = null;
-    pitch: number = null;
+    setHeading(heading: number): void {
+        this._heading.next(heading);
+    }
 
-    /*private _lng = new Subject<number>()
-    private _heading = new Subject<number>()
-    private _pitch = new Subject<number>()
-*//*
-    lat$ = this._lat.asObservable();
-    /*  lng$ = this._lng.asObservable();
-      heading$ = this._heading.asObservable();
-      pitch$ = this._pitch.asObservable();
-  */
+    getPitch(): number {
+        return this._pitch.getValue();
+    }
 
-/*
-    setLat(lat: number) {
-        this._lat.next(lat);
+    setPitch(pitch: number): void {
+        this._pitch.next(pitch);
     }
 
     isBlank() {
-        //return _.isNull(this._lat) && _.isNull(this._lng) && _.isNull(this._heading) && _.isNull(this._pitch);
-        return _.isNull(this._lat) && _.isNull(this.lng) && _.isNull(this.heading) && _.isNull(this.pitch);
+        return _.isNull(this.getLat()) && _.isNull(this.getLng()) && _.isNull(this.getHeading()) && _.isNull(this.getPitch());
     }
-
 }
-*/

@@ -21,6 +21,9 @@ export class PanoramaComponent implements OnInit {
     configuration: Configuration;
     errorMessage: string;
     lat: number;
+    long: number;
+    heading: number;
+    pitch: number;
     subscription: Subscription;
     mapLoader: GoogleMapsLoader;
 
@@ -33,14 +36,21 @@ export class PanoramaComponent implements OnInit {
                     this.movePanorama();
                 }
             });
+
+        this.subscription = currentLocation.lng$.subscribe(
+            long => {
+                if (long) {
+                    this.long = long;
+                    this.movePanorama();
+                }
+            });
     }
 
     public movePanorama(): void {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
                 if (this.panorama) {
-                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.currentLocation.lng))
+                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.long))
                 }
 
             });
@@ -49,12 +59,11 @@ export class PanoramaComponent implements OnInit {
     public setPanorama(): void {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                //this.geocoder = new _mapsApi.Map(document.getElementById("gmap"), { center: 123 });
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
-                    position: new _mapsApi.LatLng(this.lat, this.currentLocation.lng),
+                    position: new _mapsApi.LatLng(this.lat, this.long),
                     pov: {
-                        heading: this.currentLocation.heading,
-                        pitch: this.currentLocation.pitch
+                        heading: this.currentLocation.getHeading(),
+                        pitch: this.currentLocation.getPitch()
                     }
                 });
 
@@ -67,13 +76,13 @@ export class PanoramaComponent implements OnInit {
                 this.configuration = _.first(c);
                 if (this.currentLocation.isBlank()) {
                     this.currentLocation.setLat(this.configuration.lat);
-                    this.currentLocation.lng = this.configuration.lng;
-                    this.currentLocation.heading = this.configuration.headingCenter;
-                    this.currentLocation.pitch = this.configuration.pitchCenter;
-                    this.currentLocation.refresh = true;
+                    this.currentLocation.setLng(this.configuration.lng);
+                    this.currentLocation.setHeading(this.configuration.headingCenter);
+                    this.currentLocation.setPitch(this.configuration.pitchCenter);
                 }
                 else {
                     this.lat = this.currentLocation.getLat();
+                    this.long = this.currentLocation.getLng();
                 }
 
                 this.setPanorama();

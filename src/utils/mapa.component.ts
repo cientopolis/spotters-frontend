@@ -35,15 +35,18 @@ export class MapaComponent implements OnInit {
             lat => {
                 this.lat = lat;
             });
+
+        currentLocationService.lng$.subscribe(
+            long => {
+                this.long = long;
+            });
     }
 
     updateCurrentPosition() {
         this.currentLocationService.setLat(this.panorama.getPosition().lat());
-
-        this.currentLocationService.lng = this.panorama.getPosition().lng();
-        this.currentLocationService.heading = this.panorama.getPov().heading;
-        this.currentLocationService.pitch = this.panorama.getPov().pitch;
-        this.currentLocationService.refresh = true;
+        this.currentLocationService.setLng(this.panorama.getPosition().lng());
+        this.currentLocationService.setHeading(this.panorama.getPov().heading);
+        this.currentLocationService.setPitch(this.panorama.getPov().pitch);
     }
 
     clearMarkers() {
@@ -72,19 +75,17 @@ export class MapaComponent implements OnInit {
                 this.configuration = _.first(c);
                 if (this.currentLocationService.isBlank()) {
                     this.currentLocationService.setLat(this.configuration.lat);
-                    this.currentLocationService.lng = this.configuration.lng;
-                    this.currentLocationService.heading = this.configuration.headingCenter;
-                    this.currentLocationService.pitch = this.configuration.pitchCenter;
-                    this.currentLocationService.refresh = true;
+                    this.currentLocationService.setLng(this.configuration.lng);
+                    this.currentLocationService.setHeading(this.configuration.headingCenter);
+                    this.currentLocationService.setPitch(this.configuration.pitchCenter);
                 }
-
                 this.setMap();
             },
             e => this.errorMessage = e);
     }
 
     getCandidates(): void {
-        this.candidatesProvider.getAll({ lat: this.lat, lng: this.currentLocationService.lng }).subscribe(
+        this.candidatesProvider.getAll({ lat: this.lat, lng: this.long }).subscribe(
             c => {
                 this.candidates = c
                 this.refreshMarkers();
@@ -96,30 +97,27 @@ export class MapaComponent implements OnInit {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
                 let mapProp = {
-                    center: new _mapsApi.LatLng(this.lat, this.configuration.lng),
+                    center: new _mapsApi.LatLng(this.lat, this.long),
                     zoom: this.configuration.zoom,
                     scrollwheel: false,
                 };
 
                 this.map = new _mapsApi.Map(document.getElementById("gmap"), mapProp);
                 let panoramaProp = {
-                    position: new _mapsApi.LatLng(this.lat, this.currentLocationService.lng),
+                    position: new _mapsApi.LatLng(this.lat, this.long),
                     pov: {
-                        heading: this.currentLocationService.heading,
-                        pitch: this.currentLocationService.pitch
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
                     }
                 }
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById('streetview_1'), panoramaProp);
-
                 this.map.setStreetView(this.panorama);
-
                 this.panorama.addListener('position_changed', () => {
                     this.updateCurrentPosition();
                     this.getCandidates();
                 });
 
                 this.getCandidates();
-
             });
     }
 
