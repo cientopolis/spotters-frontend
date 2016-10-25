@@ -28,7 +28,6 @@ export class PanoramaComponent implements OnInit {
         this.subscription = currentLocation.lat$.subscribe(
             lat => {
                 if (lat) {
-                    console.log('en el panorama llega la latitud ' + lat);
                     this.lat = lat;
                     this.movePanorama();
                 }
@@ -42,10 +41,6 @@ export class PanoramaComponent implements OnInit {
     }
 
     public setPanorama(): void {
-        console.log('seteo el panorama con');
-        console.log(this.lat);
-        console.log(this.currentLocation.lng);
-
         this.panorama = new google.maps.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
             position: new google.maps.LatLng(this.lat, this.currentLocation.lng),
             pov: {
@@ -59,9 +54,7 @@ export class PanoramaComponent implements OnInit {
         this.configurationProvider.getAll().subscribe(
             c => {
                 this.configuration = _.first(c);
-                console.log('en el panorama, chequeo si es blank');
                 if (this.currentLocation.isBlank()) {
-                    console.log('el panorama dice que es blank');
                     this.currentLocation.setLat(this.configuration.lat);
                     this.currentLocation.lng = this.configuration.lng;
                     this.currentLocation.heading = this.configuration.headingCenter;
@@ -82,6 +75,6 @@ export class PanoramaComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getConfiguration();
+        //   this.getConfiguration();
     }
 }
