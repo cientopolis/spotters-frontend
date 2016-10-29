@@ -5,51 +5,31 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>profile</ion-title>
+    <ion-title>Profile</ion-title>
   </ion-navbar>
-
 </ion-header>
 
+<ion-content padding *ngIf="!auth.authenticated()">
+  
+  <button ion-button block (click)="auth.login()">Login</button>
+  
+</ion-content>
 
-<ion-content padding>
-  <ion-segment [(ngModel)]="choice">
-    <ion-segment-button value="personal_data">
-      Perfil
-    </ion-segment-button>
-    <ion-segment-button value="candidates">
-      Candidatos
-    </ion-segment-button>
-    <ion-segment-button value="configuration">
-      Configuración
-    </ion-segment-button>
-  </ion-segment>
+<ion-content padding *ngIf="auth.authenticated()">
+  
+  <ion-card>
 
-  <div [ngSwitch]="choice">
-    <ion-list *ngSwitchCase="'personal_data'">
-      <ion-item>
-        <ion-label stacked>Username</ion-label>
-        <ion-input type="text"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label stacked>Password</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'candidates'">
-      <ion-item>
-
-      </ion-item>
-
-    </ion-list>
-    <ion-list *ngSwitchCase="'configuration'">
-      <ion-item>
-
-      </ion-item>
-    </ion-list>
-  </div>
-
+    <ion-item *ngIf="auth.user">
+      <ion-avatar item-left>
+        <img src="{{ auth.user.picture }}">
+      </ion-avatar>
+      <h2>{{ auth.user.nickname }}</h2>
+      <p>{{ auth.user.email }}</p>
+    </ion-item>
+  
+  </ion-card>
+  
+  <button ion-button block (click)="auth.logout()">Logout</button>
+  
 </ion-content>
