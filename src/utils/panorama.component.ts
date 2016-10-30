@@ -67,7 +67,21 @@ export class PanoramaComponent implements OnInit {
                     }
                 });
 
+                this.panorama.addListener('position_changed', () => {
+                    this.updateCurrentPosition();
+                });
             });
+    }
+
+    public updateCurrentPosition(): void {
+        if ((this.currentLocation.getLat() != this.panorama.getPosition().lat()) && (this.currentLocation.getLng() != this.panorama.getPosition().lng())) {
+
+            console.log('Actualizando el panorama component !');
+            this.currentLocation.setLat(this.panorama.getPosition().lat());
+            this.currentLocation.setLng(this.panorama.getPosition().lng());
+            this.currentLocation.setHeading(this.panorama.getPov().heading);
+            this.currentLocation.setPitch(this.panorama.getPov().pitch);
+        }
     }
 
     public getConfiguration(): void {

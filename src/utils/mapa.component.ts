@@ -34,19 +34,36 @@ export class MapaComponent implements OnInit {
         currentLocationService.lat$.subscribe(
             lat => {
                 this.lat = lat;
+                //                this.updateCurrentPosition();
+                this.movePanorama();
             });
 
         currentLocationService.lng$.subscribe(
             long => {
                 this.long = long;
+                //              this.updateCurrentPosition();
+                //this.movePanorama();
             });
     }
 
     updateCurrentPosition() {
-        this.currentLocationService.setLat(this.panorama.getPosition().lat());
-        this.currentLocationService.setLng(this.panorama.getPosition().lng());
-        this.currentLocationService.setHeading(this.panorama.getPov().heading);
-        this.currentLocationService.setPitch(this.panorama.getPov().pitch);
+        if (this.panorama) {
+            if ((this.currentLocationService.getLat() != this.panorama.getPosition().lat()) && (this.currentLocationService.getLng() != this.panorama.getPosition().lng())) {
+                this.currentLocationService.setLat(this.panorama.getPosition().lat());
+                this.currentLocationService.setLng(this.panorama.getPosition().lng());
+                this.currentLocationService.setHeading(this.panorama.getPov().heading);
+                this.currentLocationService.setPitch(this.panorama.getPov().pitch);
+            }
+        }
+    }
+
+    public movePanorama(): void {
+        GoogleMapsLoader.load()
+            .then((_mapsApi) => {
+                if (this.panorama) {
+                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.long));
+                }
+            });
     }
 
     clearMarkers() {
