@@ -20,28 +20,17 @@ export class PanoramaComponent implements OnInit {
     panorama: any;
     configuration: Configuration;
     errorMessage: string;
-    lat: number;
-    long: number;
-    heading: number;
-    pitch: number;
     subscription: Subscription;
     mapLoader: GoogleMapsLoader;
 
-    constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private currentLocation: CurrentLocationService) {
+    constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private currentLocationService: CurrentLocationService) {
         this.mapLoader = mapLoader;
-        this.subscription = currentLocation.lat$.subscribe(
-            lat => {
-                if (lat) {
-                    this.lat = lat;
+        this.subscription = currentLocationService.refresh$.subscribe(
+            refresh => {
+                if (refresh) {
+                    currentLocationService.setRefresh(false);
                     this.movePanorama();
-                }
-            });
-
-        this.subscription = currentLocation.lng$.subscribe(
-            long => {
-                if (long) {
-                    this.long = long;
-                    this.movePanorama();
+                    this.refreshPanorama();
                 }
             });
     }
@@ -49,10 +38,25 @@ export class PanoramaComponent implements OnInit {
     public movePanorama(): void {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                if (this.panorama) {
-                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.long))
+                if (this.panorama && !(this.currentLocationService.getLat() === this.panorama.getPosition().lat() && this.currentLocationService.getLng() === this.panorama.getPosition().lng())) {
+                    this.panorama.setPosition(new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()));
+                    this.panorama.setPov({
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
+                    });
                 }
+            });
+    }
 
+    public refreshPanorama(): void {
+        GoogleMapsLoader.load()
+            .then((_mapsApi) => {
+                if (this.panorama && !(this.currentLocationService.getHeading() === this.panorama.getPov().heading && this.currentLocationService.getPitch() === this.panorama.getPov().pitch)) {
+                    this.panorama.setPov({
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
+                    });
+                }
             });
     }
 
@@ -60,27 +64,29 @@ export class PanoramaComponent implements OnInit {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
-                    position: new _mapsApi.LatLng(this.lat, this.long),
+                    position: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
                     pov: {
-                        heading: this.currentLocation.getHeading(),
-                        pitch: this.currentLocation.getPitch()
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
                     }
                 });
 
                 this.panorama.addListener('position_changed', () => {
                     this.updateCurrentPosition();
                 });
+                this.panorama.addListener('pov_changed', () => {
+                    this.updateCurrentPosition();
+                });
             });
     }
 
     public updateCurrentPosition(): void {
-        if ((this.currentLocation.getLat() != this.panorama.getPosition().lat()) && (this.currentLocation.getLng() != this.panorama.getPosition().lng())) {
-
-            console.log('Actualizando el panorama component !');
-            this.currentLocation.setLat(this.panorama.getPosition().lat());
-            this.currentLocation.setLng(this.panorama.getPosition().lng());
-            this.currentLocation.setHeading(this.panorama.getPov().heading);
-            this.currentLocation.setPitch(this.panorama.getPov().pitch);
+        if (this.panorama && !this.currentLocationService.getRefresh() && !this.currentLocationService.isEqualTo(this.panorama.getPosition().lat(), this.panorama.getPosition().lng(), this.panorama.getPov().heading, this.panorama.getPov().pitch)) {
+            this.currentLocationService.setLat(this.panorama.getPosition().lat());
+            this.currentLocationService.setLng(this.panorama.getPosition().lng());
+            this.currentLocationService.setHeading(this.panorama.getPov().heading);
+            this.currentLocationService.setPitch(this.panorama.getPov().pitch);
+            this.currentLocationService.setRefresh(true);
         }
     }
 
@@ -88,15 +94,12 @@ export class PanoramaComponent implements OnInit {
         this.configurationProvider.getAll().subscribe(
             c => {
                 this.configuration = _.first(c);
-                if (this.currentLocation.isBlank()) {
-                    this.currentLocation.setLat(this.configuration.lat);
-                    this.currentLocation.setLng(this.configuration.lng);
-                    this.currentLocation.setHeading(this.configuration.headingCenter);
-                    this.currentLocation.setPitch(this.configuration.pitchCenter);
-                }
-                else {
-                    this.lat = this.currentLocation.getLat();
-                    this.long = this.currentLocation.getLng();
+                if (this.currentLocationService.isBlank()) {
+                    this.currentLocationService.setLat(this.configuration.lat);
+                    this.currentLocationService.setLng(this.configuration.lng);
+                    this.currentLocationService.setHeading(this.configuration.headingCenter);
+                    this.currentLocationService.setPitch(this.configuration.pitchCenter);
+                    this.currentLocationService.setRefresh(true);
                 }
 
                 this.setPanorama();

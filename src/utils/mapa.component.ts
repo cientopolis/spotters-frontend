@@ -21,8 +21,6 @@ declare var google: any;
 export class MapaComponent implements OnInit {
     map: any;
     panorama: any;
-    lat: number;
-    long: number;
     candidates: Candidate[];
     configuration: Configuration;
     errorMessage: string;
@@ -31,37 +29,45 @@ export class MapaComponent implements OnInit {
 
     constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, public currentLocationService: CurrentLocationService) {
         this.mapLoader = mapLoader;
-        currentLocationService.lat$.subscribe(
-            lat => {
-                this.lat = lat;
-                //                this.updateCurrentPosition();
-                this.movePanorama();
-            });
-
-        currentLocationService.lng$.subscribe(
-            long => {
-                this.long = long;
-                //              this.updateCurrentPosition();
-                //this.movePanorama();
+        currentLocationService.refresh$.subscribe(
+            refresh => {
+                if (refresh) {
+                    currentLocationService.setRefresh(false);
+                    this.movePanorama();
+                    this.refreshPanorama();
+                }
             });
     }
 
     updateCurrentPosition() {
-        if (this.panorama) {
-            if ((this.currentLocationService.getLat() != this.panorama.getPosition().lat()) && (this.currentLocationService.getLng() != this.panorama.getPosition().lng())) {
-                this.currentLocationService.setLat(this.panorama.getPosition().lat());
-                this.currentLocationService.setLng(this.panorama.getPosition().lng());
-                this.currentLocationService.setHeading(this.panorama.getPov().heading);
-                this.currentLocationService.setPitch(this.panorama.getPov().pitch);
-            }
+        if (this.panorama && !this.currentLocationService.getRefresh() && !this.currentLocationService.isEqualTo(this.panorama.getPosition().lat(), this.panorama.getPosition().lng(), this.panorama.getPov().heading, this.panorama.getPov().pitch)) {
+            this.currentLocationService.setLat(this.panorama.getPosition().lat());
+            this.currentLocationService.setLng(this.panorama.getPosition().lng());
+            this.currentLocationService.setHeading(this.panorama.getPov().heading);
+            this.currentLocationService.setPitch(this.panorama.getPov().pitch);
+            this.currentLocationService.setRefresh(true);
+            this.getCandidates();
         }
     }
 
     public movePanorama(): void {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                if (this.panorama) {
-                    this.panorama.setPosition(new _mapsApi.LatLng(this.lat, this.long));
+                if (this.panorama && !(this.currentLocationService.getLat() === this.panorama.getPosition().lat() && this.currentLocationService.getLng() === this.panorama.getPosition().lng())) {
+                    this.panorama.setPosition(new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()));
+                    this.getCandidates();
+                }
+            });
+    }
+
+    public refreshPanorama(): void {
+        GoogleMapsLoader.load()
+            .then((_mapsApi) => {
+                if (this.panorama && !(this.currentLocationService.getHeading() === this.panorama.getPov().heading && this.currentLocationService.getPitch() === this.panorama.getPov().pitch)) {
+                    this.panorama.setPov({
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
+                    });
                 }
             });
     }
@@ -95,6 +101,7 @@ export class MapaComponent implements OnInit {
                     this.currentLocationService.setLng(this.configuration.lng);
                     this.currentLocationService.setHeading(this.configuration.headingCenter);
                     this.currentLocationService.setPitch(this.configuration.pitchCenter);
+                    this.currentLocationService.setRefresh(true);
                 }
                 this.setMap();
             },
@@ -102,7 +109,7 @@ export class MapaComponent implements OnInit {
     }
 
     getCandidates(): void {
-        this.candidatesProvider.getAll({ lat: this.lat, lng: this.long }).subscribe(
+        this.candidatesProvider.getAll({ lat: this.currentLocationService.getLat(), lng: this.currentLocationService.getLng() }).subscribe(
             c => {
                 this.candidates = c
                 this.refreshMarkers();
@@ -114,14 +121,14 @@ export class MapaComponent implements OnInit {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
                 let mapProp = {
-                    center: new _mapsApi.LatLng(this.lat, this.long),
+                    center: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
                     zoom: this.configuration.zoom,
                     scrollwheel: false,
                 };
 
                 this.map = new _mapsApi.Map(document.getElementById("gmap"), mapProp);
                 let panoramaProp = {
-                    position: new _mapsApi.LatLng(this.lat, this.long),
+                    position: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
                     pov: {
                         heading: this.currentLocationService.getHeading(),
                         pitch: this.currentLocationService.getPitch()
@@ -131,7 +138,9 @@ export class MapaComponent implements OnInit {
                 this.map.setStreetView(this.panorama);
                 this.panorama.addListener('position_changed', () => {
                     this.updateCurrentPosition();
-                    this.getCandidates();
+                });
+                this.panorama.addListener('pov_changed', () => {
+                    this.updateCurrentPosition();
                 });
 
                 this.getCandidates();
