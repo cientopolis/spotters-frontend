@@ -4,6 +4,6 @@ export interface Workflow {
     id: number;
     name: boolean;
     tasks: Task[];
-    firstTask: Task;
+    first_task: Task;
     createdAt: Date;
 }

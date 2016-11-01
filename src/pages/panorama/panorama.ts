@@ -76,17 +76,17 @@ export class PanoramaPage implements OnInit {
   }*/
 
   ngOnInit(): void {
-    // this.initialice_workflow = false;
+    this.initialice_workflow = false;
     // this.getConfiguration();
 
-    /*this.workflowProvider.getAll().subscribe(
+    this.workflowProvider.getAll().subscribe(
       w => {
         this.workflow = _.first(w);
-        this.current_task = this.workflow.firstTask;
+        this.current_task = this.workflow.first_task;
         // this.current_task = _.first(this.tasks);
         //console.log(this.current_task);
         //console.log('ahora');
         //console.log(this.current_task.widgetType)
-      })*/
+      })
   }
 }

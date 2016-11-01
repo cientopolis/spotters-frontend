@@ -16,12 +16,7 @@ export class WorkflowsProvider {
   }
 
   getAll(): Observable<Workflow[]> {
-    let observable$ = this.http
-      .get(this.workflowsUrl, { headers: this.getHeaders() })
-      .map(mapWorkflows)
-      .catch(handleError);
-
-    return observable$;
+    return this.http.get(this.workflowsUrl, { headers: this.getHeaders() }).map(res => res.json());
   }
 
   private getHeaders() {
@@ -51,7 +46,7 @@ function toWorkflow(r: any): Workflow {
     id: r.id,
     name: r.name,
     tasks: mapTasks(r.tasks),
-    firstTask: toTask(r.first_task),
+    first_task: toTask(r.first_task),
     createdAt: r.created_at
   });
   return workflow;

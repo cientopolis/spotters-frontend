@@ -14,4 +14,8 @@
 
 <ion-content padding>
   <streetview [fix]="2"></streetview>
+  <div [ngSwitch]="current_task?.multiple">
+    <h1 *ngSwitchCase="true">Es multiple</h1>
+    <h1 *ngSwitchCase="false">Es Simple</h1>
+  </div>
 </ion-content>
