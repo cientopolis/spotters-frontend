@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CandidatesProvider } from '../../providers/candidates.provider'
 import { WorkflowsProvider } from '../../providers/workflows.provider';
+import { ConfigurationProvider } from '../../providers/configuration.provider';
+import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { Candidate } from '../../providers/candidate';
 import { Workflow } from '../../providers/workflow';
 import { Task } from '../../providers/task';
+import { Configuration } from '../../providers/configuration';
 import { constants } from '../../app/app.constants';
 import { NavController } from 'ionic-angular';
 import _ from 'lodash';
@@ -17,13 +20,14 @@ export class CandidatesPage implements OnInit {
   workflows: Workflow[];
   displayMessages: [number, boolean][] = [];
   errorMessage: string = '';
+  configuration: Configuration;
 
-  constructor(public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
+  constructor(public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private configurationProvider: ConfigurationProvider, public currentLocationService: CurrentLocationService, private workflowsProvider: WorkflowsProvider) {
 
   }
 
   getCandidates(): void {
-    this.candidatesProvider.getAll().subscribe(
+    this.candidatesProvider.getAll({ lat: this.currentLocationService.getLat(), lng: this.currentLocationService.getLng() }).subscribe(
          /* happy path */ c => this.candidates = c,
          /* error path */ e => this.errorMessage = e);
   }
@@ -34,12 +38,28 @@ export class CandidatesPage implements OnInit {
          /* error path */ e => this.errorMessage = e);
   }
 
+  getConfiguration(): void {
+    this.configurationProvider.getAll().subscribe(
+      c => {
+        this.configuration = _.first(c);
+        if (this.currentLocationService.isBlank()) {
+          this.currentLocationService.setLat(this.configuration.lat);
+          this.currentLocationService.setLng(this.configuration.lng);
+          this.currentLocationService.setHeading(this.configuration.headingCenter);
+          this.currentLocationService.setPitch(this.configuration.pitchCenter);
+          this.currentLocationService.setRefresh(true);
+        }
+        this.getCandidates();
+      },
+      e => this.errorMessage = e);
+  }
+
   getUrl(candidate: Candidate): string {
     return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${candidate.lat},${candidate.lng}&heading=${candidate.heading}&pitch=${candidate.pitch}&fov=120&key=${constants.googleKey}`;
   }
 
   ngOnInit(): void {
-    this.getCandidates();
+    this.getConfiguration();
     this.getWorkflows();
   }
 

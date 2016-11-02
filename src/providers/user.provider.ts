@@ -13,11 +13,12 @@ export class UserProvider {
 
     }
 
-    register(token: string): Observable<any> {
+    sync(token: string, user: Object): Observable<any> {
         return this.http
             .post(this.userUrl, {
-                token: token
-            } , { headers: this.getHeaders() })
+                token: token,
+                user: user
+            }, { headers: this.getHeaders() })
             .catch(handleError);
     }
 

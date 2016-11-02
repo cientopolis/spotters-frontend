@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
+import { ConfigurationProvider } from '../providers/configuration.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
@@ -58,6 +59,7 @@ export function getAuthHttp(http) {
   providers: [
     NewsProvider,
     UserProvider,
+    ConfigurationProvider,
     CandidatesProvider,
     WorkflowsProvider,
     CurrentLocationService,
