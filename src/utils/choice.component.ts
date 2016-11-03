@@ -39,4 +39,9 @@ export class WorkFlowChoice implements OnInit {
             this.answers.push({ label: answer.label, next_id: answer.next_id })
         });
     }
+
+    ngOnChanges() {
+        console.log('algo cambio');
+        console.log(this.task);
+    }
 }

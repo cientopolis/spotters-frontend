@@ -41,13 +41,16 @@ export class PanoramaPage implements OnInit {
   }
 
   public nextQuestion(nextId: Number) {
-    console.log('La siguiente pregunta es ' + nextId);
-
     this.current_task = this.workflow.tasks[0];
+  }
 
-    console.log('la siguiente pregunta es');
-    console.log(this.workflow.tasks[0]);
-
+  public checkTypeInput() {
+    if (this.current_task && this.current_task.id == 3) {
+      return 'choice';
+    }
+    else {
+      return 'choice';
+    }
   }
 
   ngOnInit(): void {
