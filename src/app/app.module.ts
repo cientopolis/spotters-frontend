@@ -20,12 +20,14 @@ import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../services/auth/auth.service';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
+import { WorkFlowInput } from '../utils/input.component';
+import { WorkFlowChoice } from '../utils/choice.component';
 
 let storage: Storage = new Storage();
 
 export function getAuthHttp(http) {
   return new AuthHttp(new AuthConfig({
-    globalHeaders: [{'Accept': 'application/json'}],
+    globalHeaders: [{ 'Accept': 'application/json' }],
     tokenGetter: (() => storage.get('id_token'))
   }), http);
 }
@@ -41,7 +43,9 @@ export function getAuthHttp(http) {
     TabsPage,
     TextDirective,
     PanoramaComponent,
-    MapaComponent
+    MapaComponent,
+    WorkFlowInput,
+    WorkFlowChoice
   ],
   imports: [
     IonicModule.forRoot(SpottersApp)
