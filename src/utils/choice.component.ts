@@ -1,3 +1,4 @@
+import { updateDate } from 'ionic-angular/es2015/util/datetime-util';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from '../providers/task';
 import _ from 'lodash';
@@ -30,7 +31,7 @@ export class WorkFlowChoice implements OnInit {
         this.selectNext = next;
     }
 
-    ngOnInit(): void {
+    public updateTask() {
         let json_content = JSON.parse(this.task.content);
         this.answers = new Array();
 
@@ -40,8 +41,11 @@ export class WorkFlowChoice implements OnInit {
         });
     }
 
+    ngOnInit(): void {
+        this.updateTask();
+    }
+
     ngOnChanges() {
-        console.log('algo cambio');
-        console.log(this.task);
+        this.updateTask();
     }
 }

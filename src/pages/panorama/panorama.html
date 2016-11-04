@@ -15,11 +15,7 @@
 <ion-content padding>
   <streetview [fix]="2"></streetview>
   <div [ngSwitch]="current_task?.id && checkTypeInput()">
-    <h1 *ngSwitchCase="input">Es multiple</h1>
+    <workflow_input [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'input'"></workflow_input>
     <workflow_choice [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'choice'"></workflow_choice>
-    <p *ngSwitchDefault>
-      {{checkTypeInput()}}
-    </p>
   </div>
-  {{current_task?.content}}
 </ion-content>

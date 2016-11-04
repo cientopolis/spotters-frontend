@@ -45,11 +45,20 @@ export class PanoramaPage implements OnInit {
   }
 
   public checkTypeInput() {
-    if (this.current_task && this.current_task.id == 3) {
-      return 'choice';
-    }
-    else {
-      return 'choice';
+    //FIXME: current_task no espera el ngOnInit y es undefined (seguramente porque ngOnInit llama a una promisse)
+    if (this.current_task) {
+
+      if (this.current_task.multiple) {
+        return 'radio';
+      }
+      else {
+        if (this.current_task.widgetType == 'choice') {
+          return 'choice';
+        }
+        else {
+          return 'input';
+        }
+      }
     }
   }
 
