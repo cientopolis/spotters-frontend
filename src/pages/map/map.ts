@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import _ from "lodash";
-
 declare var google: any;
 
 @Component({

@@ -4,7 +4,6 @@ import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { Auth0Vars } from '../../auth0-variables';
 import { UserProvider } from '../../providers/user.provider';
-import _ from "lodash";
 
 // Avoid name not found warnings
 declare var Auth0: any;
