@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Task } from '../providers/task';
+import { Task } from '../models/task';
 
 @Component({
     selector: 'workflow_input',

@@ -1,6 +1,6 @@
 import { updateDate } from 'ionic-angular/es2015/util/datetime-util';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Task } from '../providers/task';
+import { Task } from '../models/task';
 import _ from 'lodash';
 
 @Component({

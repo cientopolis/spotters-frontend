@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { constants } from '../app/app.constants';
+import { User } from '../models/user';
 
 import 'rxjs/Rx';
 
@@ -19,6 +20,7 @@ export class UserProvider {
                 token: token,
                 user: user
             }, { headers: this.getHeaders() })
+            .map(r => toUser(r.json()))
             .catch(handleError);
     }
 
@@ -34,4 +36,12 @@ function handleError(error: any) {
     console.error(errorMsg);
 
     return Promise.reject(errorMsg);
+}
+
+function toUser(r: any): User {
+  let user = <User>({
+    sub: r.sub,
+    name: r.name
+  })
+  return user;
 }

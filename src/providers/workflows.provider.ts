@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { Workflow } from './workflow';
-import { Task } from './task';
+import { Workflow } from '../models/workflow';
+import { Task } from '../models/task';
 import { constants } from '../app/app.constants';
 
 import 'rxjs/Rx';

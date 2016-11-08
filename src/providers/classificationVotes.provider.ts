@@ -3,29 +3,29 @@ import { Headers, Http } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
 import { Observable } from 'rxjs/Rx';
 import { Candidate } from '../models/candidate';
+import { Classification } from '../models/classification';
 import { User } from '../models/user';
-import { Message } from '../models/message';
 import { Vote } from '../models/vote';
 import { constants } from '../app/app.constants';
 import 'rxjs/Rx';
 
 @Injectable()
-export class MessagesProvider {
+export class ClassificationVotesProvider {
 
   constructor(private http: Http, private authHttp: AuthHttp) {
 
   }
 
-  create(candidate: Candidate, message: string): Observable<Message> {
-    let messagesUrl = `${constants.endpoint}/candidates/${candidate.id}/messages.json`;
-    let message$ = this.authHttp
-      .post(messagesUrl, {
-        message: { text: message }
+  create(candidate: Candidate, classification: Classification, vote: boolean): Observable<Vote> {
+    let classificationVotesUrl = `${constants.endpoint}/candidates/${candidate.id}/classifications/${classification.id}/classification_votes.json`;
+    let vote$ = this.authHttp
+      .post(classificationVotesUrl, {
+        classification_vote: { positive: vote }
       }, { headers: this.getHeaders() })
-      .map(r => toMessage(r.json()))
+      .map(r => toVote(r.json()))
       .catch(handleError);
 
-    return message$;
+    return vote$;
   }
 
   private getHeaders() {
@@ -42,27 +42,12 @@ function handleError(error: any) {
   return Promise.reject(errorMsg);
 }
 
-function mapVotes(r: any): Vote[] {
-  return r.map(toVote);
-}
-
 function toUser(r: any): User {
   let user = <User>({
     sub: r.sub,
     name: r.name
   })
   return user;
-}
-
-function toMessage(r: any): Message {
-  let message = <Message>({
-    id: r.id,
-    text: r.text,
-    user: toUser(r.user),
-    votes: mapVotes(r.message_votes),
-    createdAt: r.created_at
-  });
-  return message;
 }
 
 function toVote(r: any): Vote {

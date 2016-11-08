@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
-import { CandidatesProvider } from '../../providers/candidates.provider'
-import { MessagesProvider } from '../../providers/messages.provider'
+import { CandidatesProvider } from '../../providers/candidates.provider';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { ConfigurationProvider } from '../../providers/configuration.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
-import { Candidate } from '../../providers/candidate';
-import { Workflow } from '../../providers/workflow';
-import { Task } from '../../providers/task';
-import { Configuration } from '../../providers/configuration';
-import { constants } from '../../app/app.constants';
+import { Candidate } from '../../models/candidate';
+import { Workflow } from '../../models/workflow';
+import { Configuration } from '../../models/configuration';
 import { NavController } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
 import _ from 'lodash';
 
 @Component({
@@ -20,12 +17,18 @@ import _ from 'lodash';
 export class CandidatesPage implements OnInit {
   candidates: Candidate[];
   workflow: Workflow;
-  displayMessages: [number, boolean][] = [];
   errorMessage: string = '';
   configuration: Configuration;
+  subscription: Subscription;
 
-  constructor(public navCtrl: NavController, private auth: AuthService, private candidatesProvider: CandidatesProvider, private messagesProvider: MessagesProvider, private configurationProvider: ConfigurationProvider, public currentLocationService: CurrentLocationService, private workflowsProvider: WorkflowsProvider) {
-
+  constructor(public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private configurationProvider: ConfigurationProvider, public currentLocationService: CurrentLocationService, private workflowsProvider: WorkflowsProvider) {
+    this.subscription = currentLocationService.refresh$.subscribe(
+      refresh => {
+        if (refresh) {
+          currentLocationService.setRefresh(false);
+          this.getCandidates();
+        }
+      });
   }
 
   getCandidates(): void {
@@ -56,41 +59,8 @@ export class CandidatesPage implements OnInit {
       e => this.errorMessage = e);
   }
 
-  getUrl(candidate: Candidate): string {
-    return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${candidate.lat},${candidate.lng}&heading=${candidate.heading}&pitch=${candidate.pitch}&fov=120&key=${constants.googleKey}`;
-  }
-
   ngOnInit(): void {
     this.getWorkflows();
     this.getConfiguration();
-  }
-
-  getTask(question: number): Task {
-    return JSON.parse(_.find(this.workflow.tasks, { "id": question }).content);
-  }
-
-  canShowMessages(candidate: Candidate): boolean {
-    let m = _.find(this.displayMessages, (x) => {
-      return x[0] === candidate.id;
-    });
-    return !_.isUndefined(m) && m[1];
-  }
-
-  toggleMessages(candidate: Candidate) {
-    let m = _.find(this.displayMessages, (x) => {
-      return x[0] === candidate.id;
-    });
-    if (_.isUndefined(m)) {
-      this.displayMessages.push([candidate.id, true]);
-    } else {
-      m[1] = !m[1];
-    }
-  }
-
-  sendMessage(candidate: Candidate, message: string) {
-    this.messagesProvider.create(candidate, message).subscribe(
-      m => candidate.messages.push(m),
-      e => this.errorMessage = e
-    )
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { News } from './news';
+import { News } from '../models/news';
 import { constants } from '../app/app.constants';
 
 import 'rxjs/Rx';

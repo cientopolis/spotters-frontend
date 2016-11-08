@@ -3,6 +3,7 @@ import moment from 'moment';
 import 'moment/src/locale/es';
 import { MomentModule } from 'angular2-moment';
 import { IonicApp, IonicModule } from 'ionic-angular';
+import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
 import { PanoramaPage } from '../pages/panorama/panorama';
@@ -14,13 +15,19 @@ import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
+import { ClassificationVotesProvider } from '../providers/classificationVotes.provider';
 import { MessagesProvider } from '../providers/messages.provider';
+import { MessageVotesProvider } from '../providers/messageVotes.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { TextDirective } from '../directives/text.directive';
 import { PanoramaComponent } from '../utils/panorama.component';
 import { MapaComponent } from '../utils/mapa.component';
-import { AuthConfig, AuthHttp } from 'angular2-jwt';
+import { CandidateCardComponent } from '../components/candidateCard/candidateCard.component';
+import { ClassificationListComponent } from '../components/candidateCard/classificationList.component';
+import { ClassificationItemComponent } from '../components/candidateCard/classificationItem.component';
+import { MessageListComponent } from '../components/candidateCard/messageList.component';
+import { MessageItemComponent } from '../components/candidateCard/messageItem.component';
 import { AuthService } from '../services/auth/auth.service';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
@@ -50,6 +57,11 @@ export function getAuthHttp(http) {
     TextDirective,
     PanoramaComponent,
     MapaComponent,
+    CandidateCardComponent,
+    ClassificationListComponent,
+    ClassificationItemComponent,
+    MessageListComponent,
+    MessageItemComponent,
     WorkFlowInput,
     WorkFlowChoice
   ],
@@ -57,7 +69,9 @@ export function getAuthHttp(http) {
     MomentModule,
     IonicModule.forRoot(SpottersApp)
   ],
-  bootstrap: [IonicApp],
+  bootstrap: [
+    IonicApp
+  ],
   entryComponents: [
     SpottersApp,
     MapPage,
@@ -72,7 +86,9 @@ export function getAuthHttp(http) {
     UserProvider,
     ConfigurationProvider,
     CandidatesProvider,
+    ClassificationVotesProvider,
     MessagesProvider,
+    MessageVotesProvider,
     WorkflowsProvider,
     CurrentLocationService,
     AuthService,

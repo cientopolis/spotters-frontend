@@ -7,46 +7,5 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-card *ngFor="let candidate of candidates">
-    <ion-item>
-      <ion-icon name="person" item-left></ion-icon>
-      <h2>{{candidate.owner.name}}</h2>
-    </ion-item>
-
-    <img [src]="getUrl(candidate)" />
-
-    <ion-card-content text-wrap>
-      <ion-item *ngFor="let classification of candidate.classifications">
-        <div *ngFor="let task of classification.data">
-          <p class="task-question">{{getTask(task.question).question}}</p>
-          <p>{{task.answer}}</p>
-        </div>
-      </ion-item>
-
-      <ion-item [hidden]="!canShowMessages(candidate)">
-        <div *ngFor="let message of candidate.messages">
-          <p>
-            <ion-badge item-left color="secondary">{{message.user.name}}</ion-badge>
-            {{message.text}} publicado {{message.createdAt | amTimeAgo}}
-          </p>
-        </div>
-      </ion-item>
-
-      <ion-item [hidden]="!canShowMessages(candidate) || !auth.authenticated()">
-        <ion-input type="text" [(ngModel)]="message" placeholder="Escribe un comentario"></ion-input>
-        <button item-right ion-button round (click)="sendMessage(candidate, message)">
-          Enviar
-        </button>
-      </ion-item>
-    </ion-card-content>
-
-    <ion-row>
-      <ion-col>
-        <button ion-button color="primary" clear small icon-left (click)="toggleMessages(candidate)">
-          <ion-icon name="mail"></ion-icon>
-          Mensajes
-        </button>
-      </ion-col>
-    </ion-row>
-  </ion-card>
+  <candidate-card *ngFor="let candidate of candidates" [candidate]="candidate" [workflow]="workflow"></candidate-card>
 </ion-content>
