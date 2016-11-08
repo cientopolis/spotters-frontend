@@ -1,0 +1,28 @@
+<!--
+  Generated template for the Expert page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Panel de Experto</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-select [(ngModel)]="status" (ionChange)="getCandidates()">
+        <ion-option value="active">Activo</ion-option>
+        <ion-option value="locked">Bloqueado</ion-option>
+        <ion-option value="discarded">Descartado</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <candidate-card *ngFor="let candidate of candidates" [candidate]="candidate" [workflow]="workflow" [expert]="expert"></candidate-card>
+</ion-content>

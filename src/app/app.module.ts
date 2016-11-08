@@ -11,6 +11,7 @@ import { CandidatesPage } from '../pages/candidates/candidates';
 import { ProfilePage } from '../pages/profile/profile';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
+import { ExpertPage } from '../pages/expert/expert';
 import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
@@ -54,6 +55,7 @@ export function getAuthHttp(http) {
     ProfilePage,
     HomePage,
     TabsPage,
+    ExpertPage,
     TextDirective,
     PanoramaComponent,
     MapaComponent,
@@ -79,7 +81,8 @@ export function getAuthHttp(http) {
     CandidatesPage,
     ProfilePage,
     HomePage,
-    TabsPage
+    TabsPage,
+    ExpertPage
   ],
   providers: [
     NewsProvider,

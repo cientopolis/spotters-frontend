@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {AuthService} from '../../services/auth/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { ExpertPage } from '../expert/expert';
 
 /*
   Generated class for the Profile page.
@@ -13,12 +14,10 @@ import {AuthService} from '../../services/auth/auth.service';
   templateUrl: 'profile.html'
 })
 export class ProfilePage {
-  choice: string;
+  expertPage = ExpertPage;
 
-  constructor(public navCtrl: NavController, public auth: AuthService) {}
-
-  ionViewDidLoad() {
-    console.log('Hello Profile Page');
+  constructor(public navCtrl: NavController, public auth: AuthService) {
+    
   }
 
 }

@@ -34,7 +34,7 @@ export class MessageItemComponent implements OnInit {
     calculateVotes() {
         this.positiveVotes = _.filter(this.message.votes, { 'positive': true }).length;
         this.negativeVotes = this.message.votes.length - this.positiveVotes;
-        this.userVoted = !_.isUndefined(_.find(this.message.votes, v => {
+        this.userVoted = this.auth.authenticated() && !_.isUndefined(_.find(this.message.votes, v => {
             return v.user.sub === (this.auth.user as any).user_id; // Corregir este hack
         }));
     }
