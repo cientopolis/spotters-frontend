@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MomentModule } from 'angular2-moment';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
@@ -11,6 +12,7 @@ import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
+import { MessagesProvider } from '../providers/messages.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { TextDirective } from '../directives/text.directive';
@@ -48,6 +50,7 @@ export function getAuthHttp(http) {
     WorkFlowChoice
   ],
   imports: [
+    MomentModule,
     IonicModule.forRoot(SpottersApp)
   ],
   bootstrap: [IonicApp],
@@ -65,6 +68,7 @@ export function getAuthHttp(http) {
     UserProvider,
     ConfigurationProvider,
     CandidatesProvider,
+    MessagesProvider,
     WorkflowsProvider,
     CurrentLocationService,
     AuthService,
