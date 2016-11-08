@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import moment from 'moment';
+import 'moment/src/locale/es';
 import { MomentModule } from 'angular2-moment';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { SpottersApp } from './app.component';
@@ -24,6 +26,8 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
+
+moment.locale('es');
 
 let storage: Storage = new Storage();
 
