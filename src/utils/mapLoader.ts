@@ -1,4 +1,6 @@
-const url = 'https://maps.googleapis.com/maps/api/js?callback=__onGoogleMapsLoaded&ey=YOUR_API_KEY';
+import { constants } from '../app/app.constants';
+
+const url = 'https://maps.googleapis.com/maps/api/js?callback=__onGoogleMapsLoaded&key=' + constants.googleKey;
 export class GoogleMapsLoader {
   private static promise;
   public static load() {

@@ -7,18 +7,20 @@ import { Configuration } from '../models/configuration';
 import { CurrentLocationService } from './currentLocation.service';
 import { GoogleMapsLoader } from './mapLoader';
 import _ from "lodash";
+import randomstring from 'randomstring';
 
-declare var google: any;
+declare var google: any; 
 
 @Component({
     selector: 'googleMap',
     template: `
         <div id="gmap"></div>
-        <streetview [fix]="1"></streetview>
+        <streetview [fix]="fix"></streetview>
     `,
     providers: [ConfigurationProvider, CandidatesProvider, GoogleMapsLoader]
 })
 export class MapaComponent implements OnInit {
+    fix: string = randomstring.generate();
     map: any;
     panorama: any;
     candidates: Candidate[];
@@ -134,7 +136,7 @@ export class MapaComponent implements OnInit {
                         pitch: this.currentLocationService.getPitch()
                     }
                 }
-                this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById('streetview_1'), panoramaProp);
+                this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById(`streetview_${this.fix}`), panoramaProp);
                 this.map.setStreetView(this.panorama);
                 this.panorama.addListener('position_changed', () => {
                     this.updateCurrentPosition();

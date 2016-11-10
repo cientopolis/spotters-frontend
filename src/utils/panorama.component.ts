@@ -1,38 +1,45 @@
 import { CurrentLocationService } from './currentLocation.service';
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { OnInit } from '@angular/core';
 
 import { Configuration } from '../models/configuration';
+import { Candidate } from '../models/candidate';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { Subscription } from 'rxjs/Subscription';
 import { GoogleMapsLoader } from './mapLoader';
 
 import _ from "lodash";
+import randomstring from 'randomstring';
 
 @Component({
     selector: 'streetview',
     template: '<div class="street" id="streetview_{{fix}}"></div>',
     providers: [ConfigurationProvider, GoogleMapsLoader]
 })
-export class PanoramaComponent implements OnInit {
-    @Input() fix: string;
+export class PanoramaComponent implements OnInit, OnChanges {
+    @Input() fix: string = randomstring.generate();
+    @Input() hidden: boolean = false;
+    @Input() candidate: Candidate;
     panorama: any;
     configuration: Configuration;
     errorMessage: string;
     subscription: Subscription;
     mapLoader: GoogleMapsLoader;
+    mapApi: any;
 
     constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private currentLocationService: CurrentLocationService) {
         this.mapLoader = mapLoader;
-        this.subscription = currentLocationService.refresh$.subscribe(
-            refresh => {
-                if (refresh) {
-                    currentLocationService.setRefresh(false);
-                    this.movePanorama();
-                    this.refreshPanorama();
-                }
-            });
+        if (!this.candidate) {
+            this.subscription = currentLocationService.refresh$.subscribe(
+                refresh => {
+                    if (refresh) {
+                        currentLocationService.setRefresh(false);
+                        this.movePanorama();
+                        this.refreshPanorama();
+                    }
+                });
+        }
     }
 
     public movePanorama(): void {
@@ -60,23 +67,23 @@ export class PanoramaComponent implements OnInit {
             });
     }
 
-    public setPanorama(): void {
+    public setPanorama(latlng, pov): void {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
+                this.mapApi = _mapsApi;
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById("streetview_" + this.fix), {
-                    position: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
-                    pov: {
-                        heading: this.currentLocationService.getHeading(),
-                        pitch: this.currentLocationService.getPitch()
-                    }
+                    position: latlng,
+                    pov: pov
                 });
 
-                this.panorama.addListener('position_changed', () => {
-                    this.updateCurrentPosition();
-                });
-                this.panorama.addListener('pov_changed', () => {
-                    this.updateCurrentPosition();
-                });
+                if (!this.candidate) {
+                    this.panorama.addListener('position_changed', () => {
+                        this.updateCurrentPosition();
+                    });
+                    this.panorama.addListener('pov_changed', () => {
+                        this.updateCurrentPosition();
+                    });
+                }
             });
     }
 
@@ -102,7 +109,13 @@ export class PanoramaComponent implements OnInit {
                     this.currentLocationService.setRefresh(true);
                 }
 
-                this.setPanorama();
+                this.setPanorama({
+                    lat: this.currentLocationService.getLat(),
+                    lng: this.currentLocationService.getLng()
+                }, {
+                        heading: this.currentLocationService.getHeading(),
+                        pitch: this.currentLocationService.getPitch()
+                    });
             },
             e => this.errorMessage = e);
     }
@@ -112,6 +125,24 @@ export class PanoramaComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getConfiguration();
+        if (this.candidate) {
+            this.setPanorama({
+                lat: this.candidate.lat,
+                lng: this.candidate.lng
+            }, {
+                    heading: this.candidate.heading,
+                    pitch: this.candidate.pitch
+                });
+        } else {
+            this.getConfiguration();
+        }
+    }
+
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+        for (let propName in changes) {
+            if (this.panorama && propName === 'hidden') {
+                this.mapApi.event.trigger(this.panorama, 'resize');
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ export class CandidateCardComponent {
   @Input() workflow: Workflow;
   @Input() expert: boolean = false;
   displayMessages: boolean = false;
+  displayPanorama: boolean = false;
   errorMessage: string = '';
 
   constructor(private auth: AuthService) {
@@ -29,7 +30,17 @@ export class CandidateCardComponent {
     return JSON.parse(_.find(this.workflow.tasks, { "id": question }).content);
   }
 
-  toggleMessages(candidate: Candidate) {
+  toggleMessages() {
     this.displayMessages = !this.displayMessages;
+  }
+
+  toggleMap() {
+    this.displayPanorama = !this.displayPanorama;
+    if (this.displayPanorama) {
+      let height = document.getElementById(`picture${this.candidate.id}`).clientHeight;
+      document.getElementById(`streetview_${this.candidate.id}`).style.height = `${height}px`;
+    } else {
+      document.getElementById(`streetview_${this.candidate.id}`).style.height = `0px`;
+    }
   }
 }
