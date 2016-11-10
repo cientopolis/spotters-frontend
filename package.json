@@ -30,7 +30,7 @@
     "randomstring": "1.1.5"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.42",
+    "@ionic/app-scripts": "0.0.43",
     "@types/moment": "^2.13.0",
     "typescript": "2.0.6"
   },
