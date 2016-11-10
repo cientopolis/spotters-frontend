@@ -10,25 +10,27 @@ import _ from 'lodash';
 })
 export class WorkFlowChoice implements OnInit {
     @Input() task: Task;
-    @Output() nextQuestion = new EventEmitter<Number>();
+    @Output() nextQuestion = new EventEmitter();
 
-    private question: String;
+    private question: string;
     private answers: {
-        label: String,
-        next_id: Number
+        label: string,
+        next_id: number
     }[];
-    private selectNext: Number;
+    private selectNext: number;
+    private value: string;
 
     constructor() {
 
     }
 
     public next() {
-        this.nextQuestion.emit(this.selectNext);
+        this.nextQuestion.emit({next: this.selectNext, value: this.value});
     }
 
-    public setNextId(next: Number) {
+    public setNextId(next: number, selectedValue: string) {
         this.selectNext = next;
+        this.value = selectedValue;
     }
 
     public updateTask() {

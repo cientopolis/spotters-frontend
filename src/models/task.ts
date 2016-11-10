@@ -1,7 +1,7 @@
 export interface Task {
     id: number;
     multiple: boolean;
-    widgetType: string;
+    widget_type: string;
     content: any;
     createdAt: Date;
 }

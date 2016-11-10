@@ -34,6 +34,7 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
+import { WorkFlowRadio }from '../utils/radio.component';
 
 moment.locale('es');
 
@@ -65,7 +66,8 @@ export function getAuthHttp(http) {
     MessageListComponent,
     MessageItemComponent,
     WorkFlowInput,
-    WorkFlowChoice
+    WorkFlowChoice,
+    WorkFlowRadio
   ],
   imports: [
     MomentModule,
