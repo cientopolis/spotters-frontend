@@ -4,33 +4,25 @@ import { Task } from '../providers/task';
 import _ from 'lodash';
 
 @Component({
-    selector: 'workflow_choice',
-    templateUrl: 'choice.html',
+    selector: 'workflow_radio',
+    templateUrl: 'radio.html',
     providers: []
 })
-export class WorkFlowChoice implements OnInit {
+export class WorkFlowRadio implements OnInit {
     @Input() task: Task;
-    @Output() nextQuestion = new EventEmitter();
+    @Output() nextQuestion = new EventEmitter<Number>();
 
-    private question: string;
+    private question: String;
     private answers: {
-        label: string,
-        next_id: number
+        label: String
     }[];
-    private selectNext: number;
-    private value: string;
+    private next_id: Number;
 
     constructor() {
-
     }
 
     public next() {
-        this.nextQuestion.emit({next: this.selectNext, value: this.value});
-    }
-
-    public setNextId(next: number, selectedValue: string) {
-        this.selectNext = next;
-        this.value = selectedValue;
+        this.nextQuestion.emit(this.next_id);
     }
 
     public updateTask() {
@@ -39,8 +31,9 @@ export class WorkFlowChoice implements OnInit {
 
         this.question = json_content.question;
         _.each(json_content.answers, answer => {
-            this.answers.push({ label: answer.label, next_id: answer.next_id })
+            this.answers.push({ label: answer.label })
         });
+        this.next_id = json_content.next_id
     }
 
     ngOnInit(): void {

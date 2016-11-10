@@ -25,11 +25,18 @@ export class PanoramaPage implements OnInit {
   configuration: Configuration;
   errorMessage: string;
   @Input() current_task: Task;
-  initialice_workflow: Boolean;
+  initialice_workflow: boolean;
   workflow: Workflow;
 
-  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider) {
+  private classification: {
+        data: {
+          question: number,
+          answer: any //Puede ser un String o un arreglo de String si es multiple, por eso recibe Any;
+        }[]
+    };
 
+  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider) {
+ 
   }
 
   public capture(): void {
@@ -40,19 +47,40 @@ export class PanoramaPage implements OnInit {
 
   }
 
-  public nextQuestion(nextId: Number) {
-    this.current_task = this.workflow.tasks[0];
+  public nextQuestion($event) {
+    //Como tengo next_question, persisto los datos y despues cambio current_task
+
+    this.classification.data.push({
+      question: this.current_task.id,
+      answer: ''
+    })
+    console.log($event.value);
+    if (this.current_task.multiple) {
+      //como es multiple, itero los valores y se los añado
+      _.each($event.value, (value) => {
+        console.log(value);
+        //this.classification.data[this.classification.data.length() - 1].answer.push(value);
+      });
+    }
+    else {
+      //Como no es multiple, el valor devuelto es un String
+      this.classification.data[0].answer = $event.value;
+    }
+
+    let task_index = _.findIndex(this.workflow.tasks, (task) => {
+      return task.id == $event.next;
+    })
+    this.current_task = this.workflow.tasks[task_index];
   }
 
   public checkTypeInput() {
     //FIXME: current_task no espera el ngOnInit y es undefined (seguramente porque ngOnInit llama a una promisse)
     if (this.current_task) {
-
       if (this.current_task.multiple) {
         return 'radio';
       }
       else {
-        if (this.current_task.widgetType == 'choice') {
+        if (this.current_task.widget_type == 'choice') {
           return 'choice';
         }
         else {

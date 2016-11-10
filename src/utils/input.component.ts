@@ -21,7 +21,6 @@ export class WorkFlowInput implements OnInit {
         this.nextQuestion.emit(this.next_id);
     }
 
-
     public updateTask() {
         let json_content = JSON.parse(this.task.content);
         this.question = json_content.question;

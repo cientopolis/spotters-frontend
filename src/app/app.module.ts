@@ -22,6 +22,7 @@ import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
+import { WorkFlowRadio }from '../utils/radio.component';
 
 let storage: Storage = new Storage();
 
@@ -45,7 +46,8 @@ export function getAuthHttp(http) {
     PanoramaComponent,
     MapaComponent,
     WorkFlowInput,
-    WorkFlowChoice
+    WorkFlowChoice,
+    WorkFlowRadio
   ],
   imports: [
     IonicModule.forRoot(SpottersApp)

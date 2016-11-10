@@ -1,6 +1,6 @@
 <label>{{question}}</label>
 <div *ngFor='let answer of answers'>
-    <input type="radio" name="choice" (click)="setNextId(answer.next_id, answer.label)"> {{answer.label}}<br>
+    <input type="checkbox" name="choice"> {{answer.label}}<br>
 </div>
 
 <input type="button" (click)="next()" value="Siguiente Pregunta" />

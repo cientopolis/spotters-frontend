@@ -56,7 +56,7 @@ function toTask(r: any): Task {
   let task = <Task>({
     id: r.id,
     multiple: r.multiple,
-    widgetType: r.widget_type,
+    widget_type: r.widget_type,
     content: JSON.parse(r.content),
     createdAt: r.created_at
   })
