@@ -1,0 +1,14 @@
+<ion-item>
+  <ion-badge item-left color="secondary">{{positiveVotes}}</ion-badge>
+  <ion-badge item-left color="danger">{{negativeVotes}}</ion-badge>
+  <div *ngFor="let task of classification.data">
+    <p class="task-question">{{getTask(task.question).question}}</p>
+    <p>{{task.answer}}</p>
+  </div>
+  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="secondary" (click)="vote(true)">
+    <ion-icon name="arrow-up"></ion-icon>
+  </button>
+  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
+    <ion-icon name="arrow-down"></ion-icon>
+  </button>
+</ion-item>

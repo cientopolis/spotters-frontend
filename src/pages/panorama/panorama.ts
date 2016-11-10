@@ -1,6 +1,6 @@
-import { Workflow } from '../../providers/workflow';
+import { Workflow } from '../../models/workflow';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
-import { Task } from '../../providers/task';
+import { Task } from '../../models/task';
 
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { Component } from '@angular/core';
@@ -8,7 +8,7 @@ import { OnInit, Input } from '@angular/core';
 
 import { NavController } from 'ionic-angular';
 
-import { Configuration } from '../../providers/configuration';
+import { Configuration } from '../../models/configuration';
 import { ConfigurationProvider } from '../../providers/configuration.provider';
 
 import _ from "lodash";

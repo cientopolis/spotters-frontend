@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { Candidate } from './candidate';
-import { User } from './user';
-import { Classification } from './classification';
-import { Message } from './message';
-import { Vote } from './vote';
+import { Candidate } from '../models/candidate';
+import { User } from '../models/user';
+import { Classification } from '../models/classification';
+import { Message } from '../models/message';
+import { Vote } from '../models/vote';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { constants } from '../app/app.constants';
 import 'rxjs/Rx';
+import _ from 'lodash';
 
 @Injectable()
 export class CandidatesProvider {
@@ -18,10 +19,13 @@ export class CandidatesProvider {
 
   }
 
-  getAll(latlng?): Observable<Candidate[]> {
+  getAll(params = {}): Observable<Candidate[]> {
+    let querystring = _.map(params, (value, key) => {
+      return `${key}=${value}`;
+    }).join('&');
+
     let candidates$ = this.http
-      .get(`${this.candidatesUrl}?lat=${latlng.lat}&lng=${latlng.lng}`, { headers: this.getHeaders() })
-      // .get(`${this.candidatesUrl}`, { headers: this.getHeaders() })
+      .get(`${this.candidatesUrl}?${querystring}`, { headers: this.getHeaders() })
       .map(mapCandidates)
       .catch(handleError);
 
@@ -77,7 +81,7 @@ function toCandidate(r: any): Candidate {
 
 function toUser(r: any): User {
   let user = <User>({
-    id: r.id,
+    sub: r.sub,
     name: r.name
   })
   return user;

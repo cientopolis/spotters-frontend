@@ -58,7 +58,7 @@ export class AuthService {
         this.user = profile;
 
         this.userProvider.sync(this.idToken, this.user).subscribe(
-          u => console.log(u),
+          u => {},
           e => console.log(e));
       });
 

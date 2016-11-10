@@ -3,7 +3,7 @@ import { CurrentLocationService } from './currentLocation.service';
 import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 
-import { Configuration } from '../providers/configuration';
+import { Configuration } from '../models/configuration';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { Subscription } from 'rxjs/Subscription';
 import { GoogleMapsLoader } from './mapLoader';

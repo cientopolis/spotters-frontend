@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsProvider } from '../../providers/news.provider'
-import { News } from '../../providers/news'
+import { News } from '../../models/news'
 import { NavController } from 'ionic-angular';
 
 @Component({

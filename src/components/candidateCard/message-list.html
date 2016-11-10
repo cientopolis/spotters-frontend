@@ -1,0 +1,11 @@
+<ion-item [hidden]="!displayMessages">
+  <ion-list>
+    <message-item *ngFor="let message of messages" [candidate]="candidate" [message]="message"></message-item>
+  </ion-list>
+</ion-item>
+<ion-item [hidden]="!displayMessages || !auth.authenticated()">
+  <ion-input type="text" [(ngModel)]="message" placeholder="Escribe un comentario"></ion-input>
+  <button item-right ion-button round (click)="send()">
+        Enviar
+    </button>
+</ion-item>

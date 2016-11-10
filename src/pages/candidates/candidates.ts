@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CandidatesProvider } from '../../providers/candidates.provider'
+import { CandidatesProvider } from '../../providers/candidates.provider';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { ConfigurationProvider } from '../../providers/configuration.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
-import { Candidate } from '../../providers/candidate';
-import { Workflow } from '../../providers/workflow';
-import { Task } from '../../providers/task';
-import { Configuration } from '../../providers/configuration';
-import { constants } from '../../app/app.constants';
+import { Candidate } from '../../models/candidate';
+import { Workflow } from '../../models/workflow';
+import { Configuration } from '../../models/configuration';
 import { NavController } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
 import _ from 'lodash';
 
 @Component({
@@ -17,13 +16,19 @@ import _ from 'lodash';
 })
 export class CandidatesPage implements OnInit {
   candidates: Candidate[];
-  workflows: Workflow[];
-  displayMessages: [number, boolean][] = [];
+  workflow: Workflow;
   errorMessage: string = '';
   configuration: Configuration;
+  subscription: Subscription;
 
   constructor(public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private configurationProvider: ConfigurationProvider, public currentLocationService: CurrentLocationService, private workflowsProvider: WorkflowsProvider) {
-
+    this.subscription = currentLocationService.refresh$.subscribe(
+      refresh => {
+        if (refresh) {
+          currentLocationService.setRefresh(false);
+          this.getCandidates();
+        }
+      });
   }
 
   getCandidates(): void {
@@ -34,7 +39,7 @@ export class CandidatesPage implements OnInit {
 
   getWorkflows(): void {
     this.workflowsProvider.getAll().subscribe(
-         /* happy path */ w => this.workflows = w,
+         /* happy path */ w => this.workflow = _.first(w),
          /* error path */ e => this.errorMessage = e);
   }
 
@@ -54,34 +59,8 @@ export class CandidatesPage implements OnInit {
       e => this.errorMessage = e);
   }
 
-  getUrl(candidate: Candidate): string {
-    return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${candidate.lat},${candidate.lng}&heading=${candidate.heading}&pitch=${candidate.pitch}&fov=120&key=${constants.googleKey}`;
-  }
-
   ngOnInit(): void {
-    this.getConfiguration();
     this.getWorkflows();
-  }
-
-  getTask(question: number): Task {
-    return _.find(_.first(this.workflows).tasks, { "id": question });
-  }
-
-  canShowMessages(candidate: Candidate): boolean {
-    let m = _.find(this.displayMessages, (x) => {
-      return x[0] === candidate.id;
-    });
-    return !_.isUndefined(m) && m[1];
-  }
-
-  showMessages(candidate: Candidate) {
-    let m = _.find(this.displayMessages, (x) => {
-      return x[0] === candidate.id;
-    });
-    if (_.isUndefined(m)) {
-      this.displayMessages.push([candidate.id, true]);
-    } else {
-      m[1] = true;
-    }
+    this.getConfiguration();
   }
 }
