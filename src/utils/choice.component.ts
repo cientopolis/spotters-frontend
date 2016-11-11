@@ -25,7 +25,7 @@ export class WorkFlowChoice implements OnInit {
     }
 
     public next() {
-        this.nextQuestion.emit({next: this.selectNext, value: this.value});
+        this.nextQuestion.emit({ next: this.selectNext, value: this.value });
     }
 
     public setNextId(next: number, selectedValue: string) {
@@ -42,6 +42,8 @@ export class WorkFlowChoice implements OnInit {
             this.answers.push({ label: answer.label, next_id: answer.next_id })
         });
     }
+
+    //TODO: En funcion de que choice elije, podria ser o no la pregunta final, es necesario corroborar en todo momento este value
 
     ngOnInit(): void {
         this.updateTask();

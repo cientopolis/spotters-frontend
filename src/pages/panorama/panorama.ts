@@ -65,12 +65,17 @@ export class PanoramaPage implements OnInit {
         answer: $event.value
       });
     }
-    console.log('el resultado final es');
-    console.log(this.classification);
-    let task_index = _.findIndex(this.workflow.tasks, (task) => {
-      return task.id == $event.next;
-    })
-    this.current_task = this.workflow.tasks[task_index];
+
+    //Una vez armado la classification verifico si es el ultimo para ya persistirlo
+    if (_.isUndefined($event.next)) {
+      console.log('Persistiendo clasificacion ...');
+    }
+    else {
+      let task_index = _.findIndex(this.workflow.tasks, (task) => {
+        return task.id == $event.next;
+      })
+      this.current_task = this.workflow.tasks[task_index];
+    }
   }
 
   public checkTypeInput() {

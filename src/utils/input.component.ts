@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from '../models/task';
+import _ from 'lodash';
 
 @Component({
     selector: 'workflow_input',
@@ -25,6 +26,10 @@ export class WorkFlowInput implements OnInit {
         let json_content = JSON.parse(this.task.content);
         this.question = json_content.question;
         this.next_id = json_content.next_id
+    }
+
+    public isFinalQuestion(): boolean {
+        return _.isUndefined(this.next_id);
     }
 
     ngOnInit(): void {

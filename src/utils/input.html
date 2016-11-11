@@ -1,3 +1,4 @@
 <label>{{question}}</label>
 <input #value /> <br>
-<input type="button" (click)="next(value.value)" value="Siguiente Pregunta" />
+
+<input type="button" (click)="next(value.value)" value="{{isFinalQuestion() ? 'Finalizar' : 'Siguiente Pregunta'}}" />

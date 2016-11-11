@@ -3,4 +3,4 @@
     <input type="checkbox" (click)="toggleValue(answer.label)" name="choice"> {{answer.label}}<br>
 </div>
 
-<input type="button" (click)="next()" value="Siguiente Pregunta" />
+<input type="button" (click)="next()" value="{{isFinalQuestion() ? 'Finalizar' : 'Siguiente Pregunta'}}" />

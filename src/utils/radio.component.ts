@@ -1,5 +1,3 @@
-import { findIndex } from 'rxjs/operator/findIndex';
-import { updateDate } from 'ionic-angular/es2015/util/datetime-util';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Task } from '../models/task';
 import _ from 'lodash';
@@ -49,6 +47,10 @@ export class WorkFlowRadio implements OnInit {
         else {
             this.values.splice(index, 1);
         }
+    }
+
+    public isFinalQuestion(): boolean {
+        return _.isUndefined(this.next_id);
     }
 
     ngOnInit(): void {
