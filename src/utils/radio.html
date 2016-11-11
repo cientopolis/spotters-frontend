@@ -1,6 +1,6 @@
 <label>{{question}}</label>
 <div *ngFor='let answer of answers'>
-    <input type="checkbox" name="choice"> {{answer.label}}<br>
+    <input type="checkbox" (click)="toggleValue(answer.label)" name="choice"> {{answer.label}}<br>
 </div>
 
 <input type="button" (click)="next()" value="Siguiente Pregunta" />
