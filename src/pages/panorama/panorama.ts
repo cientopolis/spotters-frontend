@@ -65,6 +65,8 @@ export class PanoramaPage implements OnInit {
         answer: $event.value
       });
     }
+    console.log('el resultado final es');
+    console.log(this.classification);
     let task_index = _.findIndex(this.workflow.tasks, (task) => {
       return task.id == $event.next;
     })
