@@ -29,14 +29,13 @@ export class PanoramaPage implements OnInit {
   workflow: Workflow;
 
   private classification: {
-        data: {
-          question: number,
-          answer: any //Puede ser un String o un arreglo de String si es multiple, por eso recibe Any;
-        }[]
-    };
+    data: any;
+  };
 
   constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider) {
- 
+    this.classification = {
+      data: new Array()
+    }
   }
 
   public capture(): void {
@@ -48,25 +47,26 @@ export class PanoramaPage implements OnInit {
   }
 
   public nextQuestion($event) {
-    //Como tengo next_question, persisto los datos y despues cambio current_task
-
-    this.classification.data.push({
-      question: this.current_task.id,
-      answer: ''
-    })
-    console.log($event.value);
     if (this.current_task.multiple) {
+      this.classification.data.push({
+        question: this.current_task.id,
+        answer: new Array()
+      });
+
       //como es multiple, itero los valores y se los añado
       _.each($event.value, (value) => {
-        console.log(value);
-        //this.classification.data[this.classification.data.length() - 1].answer.push(value);
+        this.classification.data[this.classification.data.length - 1].answer.push(value);
       });
     }
     else {
       //Como no es multiple, el valor devuelto es un String
-      this.classification.data[0].answer = $event.value;
+      this.classification.data.push({
+        question: this.current_task.id,
+        answer: $event.value
+      });
     }
-
+    console.log('el resultado final es');
+    console.log(this.classification);
     let task_index = _.findIndex(this.workflow.tasks, (task) => {
       return task.id == $event.next;
     })

@@ -8,17 +8,17 @@ import { Task } from '../models/task';
 })
 export class WorkFlowInput implements OnInit {
     @Input() task: Task;
-    @Output() nextQuestion = new EventEmitter<Number>();
+    @Output() nextQuestion = new EventEmitter();
 
-    private question: String;
-    private next_id: Number;
+    private question: string;
+    private next_id: number;
 
     constructor() {
 
     }
 
-    public next() {
-        this.nextQuestion.emit(this.next_id);
+    public next(value) {
+        this.nextQuestion.emit({ next: this.next_id, value: value });
     }
 
     public updateTask() {
