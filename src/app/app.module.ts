@@ -16,6 +16,7 @@ import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
 import { CandidatesProvider } from '../providers/candidates.provider';
+import { ClassificationsProvider } from '../providers/classifications.provider';
 import { ClassificationVotesProvider } from '../providers/classificationVotes.provider';
 import { MessagesProvider } from '../providers/messages.provider';
 import { MessageVotesProvider } from '../providers/messageVotes.provider';
@@ -91,6 +92,7 @@ export function getAuthHttp(http) {
     UserProvider,
     ConfigurationProvider,
     CandidatesProvider,
+    ClassificationsProvider,
     ClassificationVotesProvider,
     MessagesProvider,
     MessageVotesProvider,

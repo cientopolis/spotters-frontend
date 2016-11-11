@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActionSheetController } from 'ionic-angular';
 import { AuthService } from '../../services/auth/auth.service';
+import { ClassificationsProvider } from '../../providers/classifications.provider';
 import { ClassificationVotesProvider } from '../../providers/classificationVotes.provider';
 import { Candidate } from '../../models/candidate';
 import { Classification } from '../../models/classification';
@@ -15,13 +17,51 @@ export class ClassificationItemComponent implements OnInit {
   @Input() candidate: Candidate;
   @Input() classification: Classification;
   @Input() workflow: Workflow;
+  @Input() expert: boolean = false;
   positiveVotes: number = 0;
   negativeVotes: number = 0;
   userVoted: boolean = false;
   errorMessage: string = '';
 
-  constructor(private auth: AuthService, private classificationVotesProvider: ClassificationVotesProvider) {
+  constructor(public actionSheetCtrl: ActionSheetController, private auth: AuthService, private classificationsProvider: ClassificationsProvider, private classificationVotesProvider: ClassificationVotesProvider) {
 
+  }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Clasificación',
+      buttons: [
+        {
+          text: 'Confirmar',
+          handler: () => {
+            this.classificationsProvider.setStatus(this.candidate, this.classification, 'confirmed').subscribe(
+              c => {
+                this.classification = c;
+                this.calculateVotes();
+              },
+              e => this.errorMessage = e
+            );
+          }
+        }, {
+          text: 'Rechazar',
+          role: 'destructive',
+          handler: () => {
+            this.classificationsProvider.setStatus(this.candidate, this.classification, 'rejected').subscribe(
+              c => {
+                this.classification = c;
+                this.calculateVotes();
+              },
+              e => this.errorMessage = e
+            );
+          }
+        }, {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
   getTask(question: number): Task {

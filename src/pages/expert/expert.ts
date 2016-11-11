@@ -19,6 +19,7 @@ export class ExpertPage implements OnInit {
   errorMessage: string = '';
   configuration: Configuration;
   subscription: Subscription;
+  expert: boolean = true;
 
   constructor(public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
 
