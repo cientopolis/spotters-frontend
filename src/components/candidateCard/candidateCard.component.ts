@@ -16,6 +16,7 @@ export class CandidateCardComponent {
   @Input() expert: boolean = false;
   displayMessages: boolean = false;
   displayPanorama: boolean = false;
+  displayNewClassification: boolean = false;
   errorMessage: string = '';
 
   constructor(private auth: AuthService) {
@@ -32,6 +33,10 @@ export class CandidateCardComponent {
 
   toggleMessages() {
     this.displayMessages = !this.displayMessages;
+  }
+
+  toggleNewClassification() {
+    this.displayNewClassification = !this.displayNewClassification;
   }
 
   toggleMap() {
