@@ -1,14 +1,21 @@
 <ion-item>
-  <ion-badge item-left color="secondary">{{positiveVotes}}</ion-badge>
-  <ion-badge item-left color="danger">{{negativeVotes}}</ion-badge>
+  <ion-icon name="person" item-left></ion-icon>
+  <h2>{{classification.user.name}}</h2>
+  <ion-badge item-right color="secondary">{{positiveVotes}}</ion-badge>
+  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="secondary" (click)="vote(true)">
+    <ion-icon name="arrow-up"></ion-icon>
+  </button>
+  <ion-badge item-right color="danger">{{negativeVotes}}</ion-badge>
+  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
+    <ion-icon name="arrow-down"></ion-icon>
+  </button>
+  <button item-right ion-button icon-only clear [hidden]="!expert || classification.status !== 'created'" (click)="presentActionSheet($event)">
+    <ion-icon name="more"></ion-icon>
+  </button>
+</ion-item>
+<ion-item>
   <div *ngFor="let task of classification.data">
     <p class="task-question">{{getTask(task.question).question}}</p>
     <p>{{task.answer}}</p>
   </div>
-  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="secondary" (click)="vote(true)">
-    <ion-icon name="arrow-up"></ion-icon>
-  </button>
-  <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
-    <ion-icon name="arrow-down"></ion-icon>
-  </button>
 </ion-item>

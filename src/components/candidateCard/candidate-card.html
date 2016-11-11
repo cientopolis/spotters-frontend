@@ -9,7 +9,7 @@
   <img id="picture{{candidate.id}}" [hidden]="displayPanorama" [src]="getUrl(candidate)" />
   <streetview [hidden]="!displayPanorama" [fix]="candidate.id" [candidate]="candidate"></streetview>
   <ion-card-content text-wrap>
-    <classification-list [candidate]="candidate" [classifications]="candidate.classifications" [workflow]="workflow"></classification-list>
+    <classification-list [candidate]="candidate" [classifications]="candidate.classifications" [workflow]="workflow" [expert]="expert"></classification-list>
     <message-list [candidate]="candidate" [messages]="candidate.messages" [displayMessages]="displayMessages"></message-list>
   </ion-card-content>
   <ion-row>

@@ -11,4 +11,5 @@ export class ClassificationListComponent {
   @Input() candidate: Candidate;
   @Input() classifications: Classification[];
   @Input() workflow: Workflow;
+  @Input() expert: boolean = false;
 }

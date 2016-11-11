@@ -90,6 +90,7 @@ function toUser(r: any): User {
 function toClassification(r: any): Classification {
   let classification = <Classification>({
     id: r.id,
+    status: r.status,
     data: JSON.parse(r.data),
     user: toUser(r.user),
     votes: mapVotes(r.classification_votes),
