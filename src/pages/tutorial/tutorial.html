@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>tutorial</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides pager>
+    <ion-slide *ngFor="let step of tutorialSteps; let last = last">
+      <h2 class="step-title" [innerHTML]="step.title"></h2>
+      <p [innerHTML]="step.text"></p>
+      <button [hidden]="last" (click)="finishTutorial()" ion-button large clear icon-right>
+        Saltear
+        <ion-icon name="close"></ion-icon>
+      </button>
+      <button [hidden]="!last" (click)="finishTutorial()" ion-button large clear icon-right>
+        Finalizar
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

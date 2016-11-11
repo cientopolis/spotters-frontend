@@ -11,6 +11,8 @@
 </ion-header>
 
 <ion-content padding *ngIf="!auth.authenticated()">
+
+  <button ion-button block [navPush]="tutorialPage">Tutorial</button>
   
   <button ion-button block (click)="auth.login()">Login</button>
   
@@ -29,6 +31,8 @@
   </ion-card>
   
   <button ion-button block [navPush]="expertPage">Panel de Experto</button>
+
+  <button ion-button block [navPush]="tutorialPage">Tutorial</button>
 
   <button ion-button block (click)="auth.logout()">Logout</button>
   

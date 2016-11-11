@@ -27,6 +27,7 @@ export class AuthService {
   user: Object;
   zoneImpl: NgZone;
   idToken: string;
+  tutorial: boolean;
 
   constructor(private authHttp: AuthHttp, zone: NgZone, private userProvider: UserProvider) {
     this.zoneImpl = zone;
@@ -58,7 +59,7 @@ export class AuthService {
         this.user = profile;
 
         this.userProvider.sync(this.idToken, this.user).subscribe(
-          u => {},
+          u => { },
           e => console.log(e));
       });
 

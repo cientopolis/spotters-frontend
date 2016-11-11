@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import moment from 'moment';
 import 'moment/src/locale/es';
+import { Http } from '@angular/http';
+import { Storage } from '@ionic/storage';
 import { MomentModule } from 'angular2-moment';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
@@ -12,6 +14,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { ExpertPage } from '../pages/expert/expert';
+import { TutorialPage } from '../pages/tutorial/tutorial';
 import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
@@ -20,6 +23,7 @@ import { ClassificationsProvider } from '../providers/classifications.provider';
 import { ClassificationVotesProvider } from '../providers/classificationVotes.provider';
 import { MessagesProvider } from '../providers/messages.provider';
 import { MessageVotesProvider } from '../providers/messageVotes.provider';
+import { TutorialStepsProvider } from '../providers/tutorialSteps.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { TextDirective } from '../directives/text.directive';
@@ -31,8 +35,6 @@ import { ClassificationItemComponent } from '../components/candidateCard/classif
 import { MessageListComponent } from '../components/candidateCard/messageList.component';
 import { MessageItemComponent } from '../components/candidateCard/messageItem.component';
 import { AuthService } from '../services/auth/auth.service';
-import { Http } from '@angular/http';
-import { Storage } from '@ionic/storage';
 import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
 import { WorkFlowRadio }from '../utils/radio.component';
@@ -58,6 +60,7 @@ export function getAuthHttp(http) {
     HomePage,
     TabsPage,
     ExpertPage,
+    TutorialPage,
     TextDirective,
     PanoramaComponent,
     MapaComponent,
@@ -85,7 +88,8 @@ export function getAuthHttp(http) {
     ProfilePage,
     HomePage,
     TabsPage,
-    ExpertPage
+    ExpertPage,
+    TutorialPage
   ],
   providers: [
     NewsProvider,
@@ -96,6 +100,7 @@ export function getAuthHttp(http) {
     ClassificationVotesProvider,
     MessagesProvider,
     MessageVotesProvider,
+    TutorialStepsProvider,
     WorkflowsProvider,
     CurrentLocationService,
     AuthService,
