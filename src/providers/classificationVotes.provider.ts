@@ -31,6 +31,8 @@ export class ClassificationVotesProvider {
   private getHeaders() {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
+    headers.append('Access-Control-Allow-Origin', '*');
+
     return headers;
   }
 }

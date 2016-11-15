@@ -72,6 +72,10 @@ export class AuthService {
     });
   }
 
+  public getToken() {
+    return this.storage.get('id_token');
+  }
+
   public authenticated() {
     return tokenNotExpired('id_token', this.idToken);
   }

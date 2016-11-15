@@ -11,6 +11,9 @@ import { NavController } from 'ionic-angular';
 import { Configuration } from '../../models/configuration';
 import { ConfigurationProvider } from '../../providers/configuration.provider';
 
+import { Candidate } from '../../models/candidate';
+import { CandidatesProvider } from '../../providers/candidates.provider';
+
 import _ from "lodash";
 
 declare var google: any;
@@ -32,7 +35,7 @@ export class PanoramaPage implements OnInit {
     data: any;
   };
 
-  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider) {
+  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider, private candidatesProvider: CandidatesProvider) {
     this.classification = {
       data: new Array()
     }
@@ -69,6 +72,11 @@ export class PanoramaPage implements OnInit {
     //Una vez armado la classification verifico si es el ultimo para ya persistirlo
     if (_.isUndefined($event.next)) {
       console.log('Persistiendo clasificacion ...');
+      this.candidatesProvider.create(this.currentLocation.getLng(), this.currentLocation.getLat(), this.currentLocation.getHeading(), this.currentLocation.getPitch())
+        .subscribe(
+        c => console.log(c),
+        e => { }
+        )
     }
     else {
       let task_index = _.findIndex(this.workflow.tasks, (task) => {

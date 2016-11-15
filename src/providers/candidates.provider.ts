@@ -10,13 +10,35 @@ import { CurrentLocationService } from '../utils/currentLocation.service';
 import { constants } from '../app/app.constants';
 import 'rxjs/Rx';
 import _ from 'lodash';
+import { AuthHttp } from 'angular2-jwt';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class CandidatesProvider {
   private candidatesUrl = `${constants.endpoint}/candidates.json`;  // URL to web api
 
-  constructor(private http: Http, private currentLocation: CurrentLocationService) {
 
+  constructor(private authService: AuthService, private http: Http, private currentLocation: CurrentLocationService, private authHttp: AuthHttp) {
+
+  }
+
+  create(lng: number, lat: number, heading: number, pitch: number): Observable<Candidate> {
+    let cantidateUrl = `${constants.endpoint}/candidates.json`;
+    let candidate$ = this.authHttp
+      .post(cantidateUrl, {
+        candidate: {
+          status: 'active',
+          lng: lng,
+          lat: lat,
+          heading: heading,
+          pitch: pitch
+        }
+      }, { headers: this.getHeaders() })
+      .map(r => {
+        toCandidate(r.json())
+      })
+      .catch(handleError);
+    return candidate$;
   }
 
   getAll(params = {}): Observable<Candidate[]> {
@@ -40,6 +62,7 @@ export class CandidatesProvider {
 }
 
 function handleError(error: any) {
+  console.log('ocurrio un error en la peticion');
   let errorMsg = error.message || `Yikes! There was was a problem with our hyperdrive device and we couldn't retrieve your data!`
   console.error(errorMsg);
 
