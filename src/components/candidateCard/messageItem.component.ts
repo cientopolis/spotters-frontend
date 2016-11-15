@@ -17,7 +17,7 @@ export class MessageItemComponent implements OnInit {
     userVoted: boolean = false;
     errorMessage: string = '';
 
-    constructor(private auth: AuthService, private messageVotesProvider: MessageVotesProvider) {
+    constructor(public auth: AuthService, private messageVotesProvider: MessageVotesProvider) {
 
     }
 

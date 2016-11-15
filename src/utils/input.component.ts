@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Task } from '../models/task';
 import _ from 'lodash';
 
@@ -11,8 +11,8 @@ export class WorkFlowInput implements OnInit {
     @Input() task: Task;
     @Output() nextQuestion = new EventEmitter();
 
-    private question: string;
-    private next_id: number;
+    question: string;
+    next_id: number;
 
     constructor() {
 
@@ -36,7 +36,7 @@ export class WorkFlowInput implements OnInit {
         this.updateTask();
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         this.updateTask();
     }
 }

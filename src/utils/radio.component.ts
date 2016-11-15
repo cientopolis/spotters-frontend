@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Task } from '../models/task';
 import _ from 'lodash';
 
@@ -11,12 +11,12 @@ export class WorkFlowRadio implements OnInit {
     @Input() task: Task;
     @Output() nextQuestion = new EventEmitter();
 
-    private question: String;
-    private answers: {
+    question: String;
+    answers: {
         label: String
     }[];
-    private next_id: Number;
-    private values = [];
+    next_id: Number;
+    values = [];
 
     constructor() {
         this.values = new Array();
@@ -57,7 +57,7 @@ export class WorkFlowRadio implements OnInit {
         this.updateTask();
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         this.updateTask();
     }
 }

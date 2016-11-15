@@ -15,7 +15,7 @@ export class MessageListComponent {
     message: string = '';
     errorMessage: string = '';
 
-    constructor(private auth: AuthService, private messagesProvider: MessagesProvider) {
+    constructor(public auth: AuthService, private messagesProvider: MessagesProvider) {
 
     }
 

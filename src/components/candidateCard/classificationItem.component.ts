@@ -23,7 +23,7 @@ export class ClassificationItemComponent implements OnInit {
   userVoted: boolean = false;
   errorMessage: string = '';
 
-  constructor(public actionSheetCtrl: ActionSheetController, private auth: AuthService, private classificationsProvider: ClassificationsProvider, private classificationVotesProvider: ClassificationVotesProvider) {
+  constructor(public actionSheetCtrl: ActionSheetController, public auth: AuthService, private classificationsProvider: ClassificationsProvider, private classificationVotesProvider: ClassificationVotesProvider) {
 
   }
 

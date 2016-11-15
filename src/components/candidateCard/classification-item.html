@@ -9,7 +9,7 @@
   <button [hidden]="userVoted || !auth.authenticated()" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
     <ion-icon name="arrow-down"></ion-icon>
   </button>
-  <button item-right ion-button icon-only clear [hidden]="!expert || classification.status !== 'created'" (click)="presentActionSheet($event)">
+  <button item-right ion-button icon-only clear [hidden]="!expert || classification.status !== 'created'" (click)="presentActionSheet()">
     <ion-icon name="more"></ion-icon>
   </button>
 </ion-item>

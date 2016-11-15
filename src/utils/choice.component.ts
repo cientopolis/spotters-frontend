@@ -1,5 +1,5 @@
 import { updateDate } from 'ionic-angular/es2015/util/datetime-util';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Task } from '../models/task';
 import _ from 'lodash';
 
@@ -12,17 +12,15 @@ export class WorkFlowChoice implements OnInit {
     @Input() task: Task;
     @Output() nextQuestion = new EventEmitter();
 
-    private question: string;
-    private answers: {
+    question: string;
+    answers: {
         label: string,
         next_id: number
     }[];
-    private selectNext: number;
-    private value: string;
+    selectNext: number;
+    value: string;
 
-    constructor() {
-
-    }
+    constructor() {}
 
     public next() {
         this.nextQuestion.emit({ next: this.selectNext, value: this.value });
@@ -35,7 +33,7 @@ export class WorkFlowChoice implements OnInit {
 
     public updateTask() {
         let json_content = JSON.parse(this.task.content);
-        this.answers = new Array();
+        this.answers = [];
 
         this.question = json_content.question;
         _.each(json_content.answers, answer => {
@@ -49,7 +47,7 @@ export class WorkFlowChoice implements OnInit {
         this.updateTask();
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         this.updateTask();
     }
 }
