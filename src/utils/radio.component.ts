@@ -27,14 +27,13 @@ export class WorkFlowRadio implements OnInit {
     }
 
     public updateTask() {
-        let json_content = JSON.parse(this.task.content);
-        this.answers = new Array();
+        this.answers = [];
 
-        this.question = json_content.question;
-        _.each(json_content.answers, answer => {
+        this.question = this.task.content.question;
+        _.each(this.task.content.answers, answer => {
             this.answers.push({ label: answer.label })
         });
-        this.next_id = json_content.next_id
+        this.next_id = this.task.content.next_id
     }
 
     public toggleValue(value: string): void {

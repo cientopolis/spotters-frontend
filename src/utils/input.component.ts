@@ -23,9 +23,8 @@ export class WorkFlowInput implements OnInit {
     }
 
     public updateTask() {
-        let json_content = JSON.parse(this.task.content);
-        this.question = json_content.question;
-        this.next_id = json_content.next_id
+        this.question = this.task.content.question;
+        this.next_id = this.task.content.next_id
     }
 
     public isFinalQuestion(): boolean {

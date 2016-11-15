@@ -32,11 +32,10 @@ export class WorkFlowChoice implements OnInit {
     }
 
     public updateTask() {
-        let json_content = JSON.parse(this.task.content);
         this.answers = [];
 
-        this.question = json_content.question;
-        _.each(json_content.answers, answer => {
+        this.question = this.task.content.question;
+        _.each(this.task.content.answers, answer => {
             this.answers.push({ label: answer.label, next_id: answer.next_id })
         });
     }
