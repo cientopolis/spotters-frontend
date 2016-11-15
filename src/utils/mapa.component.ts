@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChange } from '@angular/core';
 import { Candidate } from '../models/candidate';
 import { Configuration } from '../models/configuration';
 import { Location } from '../models/location';
@@ -17,54 +17,19 @@ declare var google: any;
     `,
     providers: [GoogleMapsLoader]
 })
-export class MapaComponent implements OnChanges {
+export class MapaComponent implements OnInit, OnChanges {
     @Input() panoramaOnly: boolean = false;
     @Input() fix: string = randomstring.generate();
     @Input() hidden: boolean = false;
-    @Input() candidate: Candidate;
+    @Input() candidate: Candidate = null;
     map: any = null;
     panorama: any = null;
     location: Location = null;
     configuration: Configuration;
     errorMessage: string;
     markers: any[] = [];
-    mapLoader: GoogleMapsLoader;
 
-    constructor(mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) {
-        this.mapLoader = mapLoader;
-        if (_.isNil(this.candidate)) { // Full map/panorama
-            this.currentLocationService.configuration$.subscribe(
-                configuration => this.configuration = configuration);
-            this.currentLocationService.candidates$.subscribe(
-                candidates => this.refreshMarkers(candidates));
-            this.currentLocationService.location$.subscribe(
-                location => {
-                    if (!_.isNil(location)) {
-                        if (_.isNil(this.panorama)) {
-                            this.location = location;
-                            this.setMap({
-                                lat: this.location.lat,
-                                lng: this.location.lng
-                            }, {
-                                    heading: this.location.heading,
-                                    pitch: this.location.pitch
-                                });
-                        } else {
-                            this.refreshPanorama(location);
-                        }
-                    }
-                });
-        } else { // Panorama for a single candidate
-            console.log(this.candidate);
-            this.setMap({
-                lat: this.candidate.lat,
-                lng: this.candidate.lng
-            }, {
-                    heading: this.candidate.heading,
-                    pitch: this.candidate.pitch
-                });
-        }
-    }
+    constructor(public mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) { }
 
     updateCurrentPosition() {
         if (this.panorama) {
@@ -133,6 +98,41 @@ export class MapaComponent implements OnChanges {
                     this.map.setStreetView(this.panorama);
                 }
             });
+    }
+
+    ngOnInit() {
+        if (_.isNil(this.candidate)) { // Full map/panorama
+            this.currentLocationService.configuration$.subscribe(
+                configuration => this.configuration = configuration);
+            this.currentLocationService.candidates$.subscribe(
+                candidates => this.refreshMarkers(candidates));
+            this.currentLocationService.location$.subscribe(
+                location => {
+                    if (!_.isNil(location)) {
+                        if (_.isNil(this.panorama)) {
+                            this.location = location;
+                            this.setMap({
+                                lat: this.location.lat,
+                                lng: this.location.lng
+                            }, {
+                                    heading: this.location.heading,
+                                    pitch: this.location.pitch
+                                });
+                        } else {
+                            this.refreshPanorama(location);
+                        }
+                    }
+                });
+        } else { // Panorama for a single candidate
+            console.log(this.candidate);
+            this.setMap({
+                lat: this.candidate.lat,
+                lng: this.candidate.lng
+            }, {
+                    heading: this.candidate.heading,
+                    pitch: this.candidate.pitch
+                });
+        }
     }
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
