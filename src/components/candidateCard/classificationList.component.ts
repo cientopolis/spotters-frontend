@@ -8,8 +8,8 @@ import { Workflow } from '../../models/workflow';
   templateUrl: 'classification-list.html'
 })
 export class ClassificationListComponent {
-  @Input() candidate: Candidate;
-  @Input() classifications: Classification[];
-  @Input() workflow: Workflow;
+  @Input() candidate: Candidate = null;
+  @Input() classifications: Classification[] = [];
+  @Input() workflow: Workflow = null;
   @Input() expert: boolean = false;
 }

@@ -11,8 +11,8 @@ import _ from 'lodash';
   templateUrl: 'candidate-card.html'
 })
 export class CandidateCardComponent {
-  @Input() candidate: Candidate;
-  @Input() workflow: Workflow;
+  @Input() candidate: Candidate = null;
+  @Input() workflow: Workflow = null;
   @Input() expert: boolean = false;
   displayMessages: boolean = false;
   displayPanorama: boolean = false;

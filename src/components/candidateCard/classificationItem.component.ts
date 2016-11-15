@@ -14,9 +14,9 @@ import _ from 'lodash';
   templateUrl: 'classification-item.html'
 })
 export class ClassificationItemComponent implements OnInit {
-  @Input() candidate: Candidate;
-  @Input() classification: Classification;
-  @Input() workflow: Workflow;
+  @Input() candidate: Candidate = null;
+  @Input() classification: Classification = null;
+  @Input() workflow: Workflow = null;
   @Input() expert: boolean = false;
   positiveVotes: number = 0;
   negativeVotes: number = 0;
@@ -65,7 +65,7 @@ export class ClassificationItemComponent implements OnInit {
   }
 
   getTask(question: number): Task {
-    return JSON.parse(_.find(this.workflow.tasks, { "id": question }).content);
+    return _.find(this.workflow.tasks, { "id": question }).content;
   }
 
   vote(vote: boolean) {

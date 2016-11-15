@@ -1,17 +1,10 @@
 import { Workflow } from '../../models/workflow';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { Task } from '../../models/task';
-
 import { CurrentLocationService } from '../../utils/currentLocation.service';
-import { Component } from '@angular/core';
-import { OnInit, Input } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
 import { NavController } from 'ionic-angular';
-
 import { Configuration } from '../../models/configuration';
-import { ConfigurationProvider } from '../../providers/configuration.provider';
-
-import { Candidate } from '../../models/candidate';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 
 import _ from "lodash";
@@ -21,7 +14,7 @@ declare var google: any;
 @Component({
   selector: 'page-panorama',
   templateUrl: 'panorama.html',
-  providers: [ConfigurationProvider, WorkflowsProvider]
+  providers: [WorkflowsProvider]
 })
 export class PanoramaPage implements OnInit {
   panorama: any;
@@ -35,7 +28,7 @@ export class PanoramaPage implements OnInit {
     data: any;
   };
 
-  constructor(public navCtrl: NavController, private configurationProvider: ConfigurationProvider, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider, private candidatesProvider: CandidatesProvider) {
+  constructor(public navCtrl: NavController, public currentLocation: CurrentLocationService, private workflowProvider: WorkflowsProvider, private candidatesProvider: CandidatesProvider) {
     this.classification = {
       data: new Array()
     }
@@ -72,7 +65,8 @@ export class PanoramaPage implements OnInit {
     //Una vez armado la classification verifico si es el ultimo para ya persistirlo
     if (_.isUndefined($event.next)) {
       console.log('Persistiendo clasificacion ...');
-      this.candidatesProvider.create(this.currentLocation.getLng(), this.currentLocation.getLat(), this.currentLocation.getHeading(), this.currentLocation.getPitch())
+      let location = this.currentLocation.getLocation();
+      this.candidatesProvider.create(location.lng, location.lat, location.heading, location.pitch)
         .subscribe(
         c => console.log(c),
         e => { }

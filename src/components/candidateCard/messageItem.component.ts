@@ -10,8 +10,8 @@ import _ from 'lodash';
     templateUrl: 'message-item.html'
 })
 export class MessageItemComponent implements OnInit {
-    @Input() candidate: Candidate;
-    @Input() message: Message;
+    @Input() candidate: Candidate = null;
+    @Input() message: Message = null;
     positiveVotes: number = 0;
     negativeVotes: number = 0;
     userVoted: boolean = false;

@@ -9,9 +9,9 @@ import { Message } from '../../models/message';
     templateUrl: 'message-list.html'
 })
 export class MessageListComponent {
-    @Input() candidate: Candidate;
-    @Input() messages: Message[];
-    @Input() displayMessages: boolean;
+    @Input() candidate: Candidate = null;
+    @Input() messages: Message[] = [];
+    @Input() displayMessages: boolean = false;
     message: string = '';
     errorMessage: string = '';
 

@@ -27,7 +27,6 @@ import { TutorialStepsProvider } from '../providers/tutorialSteps.provider';
 import { WorkflowsProvider } from '../providers/workflows.provider';
 import { CurrentLocationService } from '../utils/currentLocation.service';
 import { TextDirective } from '../directives/text.directive';
-import { PanoramaComponent } from '../utils/panorama.component';
 import { MapaComponent } from '../utils/mapa.component';
 import { CandidateCardComponent } from '../components/candidateCard/candidateCard.component';
 import { ClassificationListComponent } from '../components/candidateCard/classificationList.component';
@@ -62,7 +61,6 @@ export function getAuthHttp(http) {
     ExpertPage,
     TutorialPage,
     TextDirective,
-    PanoramaComponent,
     MapaComponent,
     CandidateCardComponent,
     ClassificationListComponent,

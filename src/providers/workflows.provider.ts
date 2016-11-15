@@ -17,7 +17,7 @@ export class WorkflowsProvider {
 
   getAll(): Observable<Workflow[]> {
     return this.http.get(this.workflowsUrl, { headers: this.getHeaders() })
-      .map(res => res.json())
+      .map(mapWorkflows)
       .catch(handleError);
   }
 

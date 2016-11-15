@@ -1,77 +1,94 @@
-import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { ConfigurationProvider } from '../providers/configuration.provider';
-import { CandidatesProvider } from '../providers/candidates.provider';
+import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { Candidate } from '../models/candidate';
 import { Configuration } from '../models/configuration';
+import { Location } from '../models/location';
 import { CurrentLocationService } from './currentLocation.service';
 import { GoogleMapsLoader } from './mapLoader';
 import _ from "lodash";
 import randomstring from 'randomstring';
 
-declare var google: any; 
+declare var google: any;
 
 @Component({
     selector: 'googleMap',
     template: `
-        <div id="gmap"></div>
-        <streetview [fix]="fix"></streetview>
+        <div [hidden]="panoramaOnly" id="gmap"></div>
+        <div class="street" id="streetview_{{fix}}"></div>
     `,
-    providers: [ConfigurationProvider, CandidatesProvider, GoogleMapsLoader]
+    providers: [GoogleMapsLoader]
 })
-export class MapaComponent implements OnInit {
-    fix: string = randomstring.generate();
-    map: any;
-    panorama: any;
-    candidates: Candidate[];
+export class MapaComponent implements OnChanges {
+    @Input() panoramaOnly: boolean = false;
+    @Input() fix: string = randomstring.generate();
+    @Input() hidden: boolean = false;
+    @Input() candidate: Candidate;
+    map: any = null;
+    panorama: any = null;
+    location: Location = null;
     configuration: Configuration;
     errorMessage: string;
     markers: any[] = [];
     mapLoader: GoogleMapsLoader;
 
-    constructor(mapLoader: GoogleMapsLoader, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, public currentLocationService: CurrentLocationService) {
+    constructor(mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) {
         this.mapLoader = mapLoader;
-        currentLocationService.refresh$.subscribe(
-            refresh => {
-                if (refresh) {
-                    currentLocationService.setRefresh(false);
-                    this.movePanorama();
-                    this.refreshPanorama();
-                }
-            });
-    }
-
-    updateCurrentPosition() {
-        if (this.panorama && !this.currentLocationService.getRefresh() && !this.currentLocationService.isEqualTo(this.panorama.getPosition().lat(), this.panorama.getPosition().lng(), this.panorama.getPov().heading, this.panorama.getPov().pitch)) {
-            this.currentLocationService.setLat(this.panorama.getPosition().lat());
-            this.currentLocationService.setLng(this.panorama.getPosition().lng());
-            this.currentLocationService.setHeading(this.panorama.getPov().heading);
-            this.currentLocationService.setPitch(this.panorama.getPov().pitch);
-            this.currentLocationService.setRefresh(true);
-            this.getCandidates();
+        if (_.isNil(this.candidate)) { // Full map/panorama
+            this.currentLocationService.configuration$.subscribe(
+                configuration => this.configuration = configuration);
+            this.currentLocationService.candidates$.subscribe(
+                candidates => this.refreshMarkers(candidates));
+            this.currentLocationService.location$.subscribe(
+                location => {
+                    if (!_.isNil(location)) {
+                        if (_.isNil(this.panorama)) {
+                            this.location = location;
+                            this.setMap({
+                                lat: this.location.lat,
+                                lng: this.location.lng
+                            }, {
+                                    heading: this.location.heading,
+                                    pitch: this.location.pitch
+                                });
+                        } else {
+                            this.refreshPanorama(location);
+                        }
+                    }
+                });
+        } else { // Panorama for a single candidate
+            console.log(this.candidate);
+            this.setMap({
+                lat: this.candidate.lat,
+                lng: this.candidate.lng
+            }, {
+                    heading: this.candidate.heading,
+                    pitch: this.candidate.pitch
+                });
         }
     }
 
-    public movePanorama(): void {
-        GoogleMapsLoader.load()
-            .then((_mapsApi) => {
-                if (this.panorama && !(this.currentLocationService.getLat() === this.panorama.getPosition().lat() && this.currentLocationService.getLng() === this.panorama.getPosition().lng())) {
-                    this.panorama.setPosition(new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()));
-                    this.getCandidates();
-                }
+    updateCurrentPosition() {
+        if (this.panorama) {
+            let l = <Location>({
+                lat: this.panorama.getPosition().lat(),
+                lng: this.panorama.getPosition().lng(),
+                heading: this.panorama.getPov().heading,
+                pitch: this.panorama.getPov().pitch
             });
+            if (this.location.lat !== l.lat || this.location.lng !== l.lng) {
+                this.currentLocationService.setLocation(l);
+            }
+        }
     }
 
-    public refreshPanorama(): void {
-        GoogleMapsLoader.load()
-            .then((_mapsApi) => {
-                if (this.panorama && !(this.currentLocationService.getHeading() === this.panorama.getPov().heading && this.currentLocationService.getPitch() === this.panorama.getPov().pitch)) {
-                    this.panorama.setPov({
-                        heading: this.currentLocationService.getHeading(),
-                        pitch: this.currentLocationService.getPitch()
-                    });
-                }
+    refreshPanorama(location: Location): void {
+        if (this.location.lat !== location.lat || this.location.lng !== location.lng) {
+            this.location = location;
+            this.panorama.setPosition({ lat: this.location.lat, lng: this.location.lng });
+            this.panorama.setPov({
+                heading: this.location.heading,
+                pitch: this.location.pitch
             });
+        }
     }
 
     clearMarkers() {
@@ -81,11 +98,11 @@ export class MapaComponent implements OnInit {
         this.markers = [];
     }
 
-    refreshMarkers(): void {
+    refreshMarkers(candidates: Candidate[]): void {
         this.clearMarkers()
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                _.each(this.candidates, candidate => {
+                _.each(candidates, candidate => {
                     this.markers.push(new _mapsApi.Marker({
                         position: new _mapsApi.LatLng(candidate.lat, candidate.lng),
                         map: this.map,
@@ -94,62 +111,38 @@ export class MapaComponent implements OnInit {
             });
     }
 
-    getConfiguration() {
-        this.configurationProvider.getAll().subscribe(
-            c => {
-                this.configuration = _.first(c);
-                if (this.currentLocationService.isBlank()) {
-                    this.currentLocationService.setLat(this.configuration.lat);
-                    this.currentLocationService.setLng(this.configuration.lng);
-                    this.currentLocationService.setHeading(this.configuration.headingCenter);
-                    this.currentLocationService.setPitch(this.configuration.pitchCenter);
-                    this.currentLocationService.setRefresh(true);
-                }
-                this.setMap();
-            },
-            e => this.errorMessage = e);
-    }
-
-    getCandidates(): void {
-        this.candidatesProvider.getAll({ lat: this.currentLocationService.getLat(), lng: this.currentLocationService.getLng() }).subscribe(
-            c => {
-                this.candidates = c
-                this.refreshMarkers();
-            },
-            e => this.errorMessage = e);
-    }
-
-    setMap() {
+    setMap(latlng, pov) {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
-                let mapProp = {
-                    center: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
-                    zoom: this.configuration.zoom,
-                    scrollwheel: false,
-                };
-
-                this.map = new _mapsApi.Map(document.getElementById("gmap"), mapProp);
                 let panoramaProp = {
-                    position: new _mapsApi.LatLng(this.currentLocationService.getLat(), this.currentLocationService.getLng()),
-                    pov: {
-                        heading: this.currentLocationService.getHeading(),
-                        pitch: this.currentLocationService.getPitch()
-                    }
+                    position: latlng,
+                    pov: pov
                 }
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById(`streetview_${this.fix}`), panoramaProp);
-                this.map.setStreetView(this.panorama);
-                this.panorama.addListener('position_changed', () => {
-                    this.updateCurrentPosition();
-                });
-                this.panorama.addListener('pov_changed', () => {
+                _mapsApi.event.addListener(this.panorama, 'position_changed', () => {
                     this.updateCurrentPosition();
                 });
 
-                this.getCandidates();
+                if (!this.panoramaOnly) {
+                    let mapProp = {
+                        center: latlng,
+                        zoom: this.configuration.zoom,
+                        scrollwheel: false,
+                    };
+                    this.map = new _mapsApi.Map(document.getElementById("gmap"), mapProp);
+                    this.map.setStreetView(this.panorama);
+                }
             });
     }
 
-    ngOnInit(): void {
-        this.getConfiguration();
+    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+        for (let propName in changes) {
+            if (this.panorama && propName === 'hidden') {
+                GoogleMapsLoader.load()
+                    .then((_mapsApi) => {
+                        _mapsApi.event.trigger(this.panorama, 'resize');
+                    });
+            }
+        }
     }
 }

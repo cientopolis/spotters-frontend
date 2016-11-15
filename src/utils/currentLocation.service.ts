@@ -1,66 +1,52 @@
-import _ from 'lodash';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Configuration } from '../models/configuration';
+import { Candidate } from '../models/candidate';
+import { Location } from '../models/location';
 
 @Injectable()
 export class CurrentLocationService {
-    private _lat = new BehaviorSubject<number>(null);
-    private _lng = new BehaviorSubject<number>(null);
-    private _heading = new BehaviorSubject<number>(null)
-    private _pitch = new BehaviorSubject<number>(null);
+
+    private _configuration = new BehaviorSubject<Configuration>(null);
+    private _candidates = new BehaviorSubject<Candidate[]>([]);
+    private _location = new BehaviorSubject<Location>(null);
     private _refresh = new BehaviorSubject<boolean>(false);
 
-    lat$ = this._lat.asObservable();
-    lng$ = this._lng.asObservable();
-    heading$ = this._heading.asObservable();
-    pitch$ = this._pitch.asObservable();
+    configuration$ = this._configuration.asObservable();
+    candidates$ = this._candidates.asObservable();
+    location$ = this._location.asObservable();
     refresh$ = this._refresh.asObservable();
 
-    getLat(): number {
-        return this._lat.getValue();
+    getConfiguration(): Configuration {
+        return this._configuration.getValue();
     }
 
-    setLat(lat: number) {
-        this._lat.next(lat);
+    setConfiguration(configuration: Configuration) {
+        this._configuration.next(configuration);
     }
 
-    getLng(): number {
-        return this._lng.getValue();
+    getCandidates(): Candidate[] {
+        return this._candidates.getValue();
     }
 
-    setLng(lng: number): void {
-        this._lng.next(lng);
+    setCandidates(candidates: Candidate[]) {
+        this._candidates.next(candidates);
     }
 
-    getHeading(): number {
-        return this._heading.getValue();
+    getLocation(): Location {
+        return this._location.getValue();
     }
 
-    setHeading(heading: number): void {
-        this._heading.next(heading);
+    setLocation(location: Location) {
+        this._location.next(location);
     }
 
-    getPitch(): number {
-        return this._pitch.getValue();
-    }
-
-    setPitch(pitch: number): void {
-        this._pitch.next(pitch);
-    }
-
-    getRefresh():  boolean {
+    getRefresh(): boolean {
         return this._refresh.getValue();
     }
 
     setRefresh(refresh: boolean): void {
         this._refresh.next(refresh);
-    }
-
-    isBlank() {
-        return _.isNull(this.getLat()) && _.isNull(this.getLng()) && _.isNull(this.getHeading()) && _.isNull(this.getPitch());
-    }
-
-    isEqualTo(lat: number, lng: number, heading: number, pitch: number): boolean {
-        return this.getLat() === lat && this.getLng() === lng && this.getHeading() === heading && this.getPitch() === pitch;
     }
 }
