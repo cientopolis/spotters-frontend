@@ -5,7 +5,6 @@ import { Location } from '../models/location';
 import { CurrentLocationService } from './currentLocation.service';
 import { GoogleMapsLoader } from './mapLoader';
 import _ from "lodash";
-import randomstring from 'randomstring';
 
 declare var google: any;
 
@@ -19,7 +18,7 @@ declare var google: any;
 })
 export class MapaComponent implements OnInit, OnChanges {
     @Input() panoramaOnly: boolean = false;
-    @Input() fix: string = randomstring.generate();
+    @Input() fix: string;
     @Input() hidden: boolean = false;
     @Input() candidate: Candidate = null;
     map: any = null;
@@ -29,7 +28,9 @@ export class MapaComponent implements OnInit, OnChanges {
     errorMessage: string;
     markers: any[] = [];
 
-    constructor(public mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) { }
+    constructor(public mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) {
+        this.fix = Array(10+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 10); // Random string
+    }
 
     updateCurrentPosition() {
         if (this.panorama) {

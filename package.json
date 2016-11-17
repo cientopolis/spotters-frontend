@@ -21,15 +21,14 @@
     "@types/lodash": "^4.14.36",
     "angular2-jwt": "0.1.23",
     "angular2-moment": "^1.0.0-beta.6",
-    "ionic-angular": "2.0.0-rc.2",
+    "ionic-angular": "2.0.0-rc.3",
     "ionic-native": "2.2.3",
     "ionicons": "3.0.0",
     "rxjs": "5.0.0-beta.12",
-    "zone.js": "0.6.21",
-    "randomstring": "1.1.5"
+    "zone.js": "0.6.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.43",
+    "@ionic/app-scripts": "0.0.45",
     "@types/moment": "^2.13.0",
     "typescript": "2.0.6"
   },
