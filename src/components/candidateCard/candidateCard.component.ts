@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { ActionSheetController } from 'ionic-angular';
+import { ActionSheetController, ModalController } from 'ionic-angular';
 import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
 import { Workflow } from '../../models/workflow';
 import { Task } from '../../models/task';
 import { constants } from '../../app/app.constants';
+import { ModalContentPage } from '../workflow/modal';
 import _ from 'lodash';
 
 @Component({
@@ -21,7 +22,7 @@ export class CandidateCardComponent {
   displayNewClassification: boolean = false;
   errorMessage: string = '';
 
-  constructor(public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
+  constructor(public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
 
   }
 
@@ -74,5 +75,12 @@ export class CandidateCardComponent {
     } else {
       document.getElementById(`streetview_${this.candidate.id}`).style.height = `0px`;
     }
+  }
+
+  initializeWorkflow() {
+    let modal = this.modalCtrl.create(ModalContentPage, {
+      candidate: this.candidate
+    });
+    modal.present();
   }
 }

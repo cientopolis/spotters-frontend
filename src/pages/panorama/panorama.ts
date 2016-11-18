@@ -21,7 +21,7 @@ export class PanoramaPage {
 
   }
 
-  initialiceWorkflow() {
+  initializeWorkflow() {
     let modal = this.modalCtrl.create(ModalContentPage, {
       location: this.currentLocation.getLocation()
     });

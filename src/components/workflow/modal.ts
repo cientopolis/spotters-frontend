@@ -9,6 +9,7 @@ import { CandidatesProvider } from '../../providers/candidates.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { constants } from '../../app/app.constants';
 import { Location } from '../../models/location';
+import { Candidate } from '../../models/candidate';
 
 import _ from "lodash";
 
@@ -17,7 +18,8 @@ import _ from "lodash";
 })
 export class ModalContentPage implements OnInit {
     workflow: Workflow;
-    location: Location;
+    location: Location = null;
+    candidate: Candidate = null;
     @Input() current_task: Task;
     classification: {
         data: any;
@@ -36,6 +38,7 @@ export class ModalContentPage implements OnInit {
         };
 
         this.location = this.params.get('location');
+        this.candidate = this.params.get('candidate');
     }
 
     dismiss() {
@@ -64,17 +67,18 @@ export class ModalContentPage implements OnInit {
 
         //Una vez armado la classification verifico si es el ultimo para ya persistirlo
         if (_.isUndefined($event.next)) {
-            let location = this.currentLocation.getLocation();
-            this.candidatesProvider.create(location.lng, location.lat, location.heading, location.pitch)
-                .subscribe(
-                c => {
-                    this.dismiss();
-                },
-                e => {
-                    console.log('Ocurrio un error al persistir al candidato ...');
-                    this.dismiss();
-                }
-                )
+            if (!_.isNil(this.location)) {
+                this.candidatesProvider.create(this.location.lng, this.location.lat, this.location.heading, this.location.pitch)
+                    .subscribe(
+                    c => {
+                        this.dismiss();
+                    }, e => {
+                        console.log('Ocurrio un error al persistir al candidato ...');
+                        this.dismiss();
+                    });
+            } else if (!_.isNil(this.candidate)) {
+                // Crear la clasificación
+            }
         }
         else {
             let task_index = _.findIndex(this.workflow.tasks, (task) => {
@@ -88,12 +92,10 @@ export class ModalContentPage implements OnInit {
         if (this.current_task) {
             if (this.current_task.multiple) {
                 return 'radio';
-            }
-            else {
+            } else {
                 if (this.current_task.widget_type == 'choice') {
                     return 'choice';
-                }
-                else {
+                } else {
                     return 'input';
                 }
             }
@@ -101,7 +103,12 @@ export class ModalContentPage implements OnInit {
     }
 
     getUrl(): string {
-        return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${this.location.lat},${this.location.lng}&heading=${this.location.heading}&pitch=${this.location.pitch}&fov=120&key=${constants.googleKey}`;
+        let d = _.isNil(this.location) ? this.candidate : this.location;
+        if (!_.isNil(d)) {
+            return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${d.lat},${d.lng}&heading=${d.heading}&pitch=${d.pitch}&fov=120&key=${constants.googleKey}`;
+        } else {
+            return '';
+        }
     }
 
     ngOnInit(): void {
