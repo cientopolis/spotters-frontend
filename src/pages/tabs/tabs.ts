@@ -24,17 +24,21 @@ export class TabsPage {
   tab4Root: any = CandidatesPage;
   tab5Root: any = ProfilePage;
 
-  errorMessage: string;
+  errorMessage: string = '';
   candidates: Candidate[] = []
+  activeCandidates: number = 0;
 
   constructor(private _zone: NgZone, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, private currentLocationService: CurrentLocationService) {
     this.currentLocationService.candidates$.subscribe(
-      c => this._zone.run(() => this.candidates = c),
+      c => this._zone.run(() => {
+        this.candidates = c;
+        this.activeCandidates = _.filter(c, { "status": "active" }).length;
+      }),
       e => this.errorMessage = e);
 
     this.currentLocationService.location$.subscribe(
       l => {
-        if (l) {
+        if (!_.isNil(l)) {
           this.getCandidates(l);
         }
       },
@@ -69,7 +73,10 @@ export class TabsPage {
 
   getCandidates(location: Location): void {
     this.candidatesProvider.getAll({ lat: location.lat, lng: location.lng }).subscribe(
-      c => this.currentLocationService.setCandidates(c),
+      c => {
+        this.currentLocationService.setCandidates(c);
+        this.activeCandidates = _.filter(c, { "status": "active" }).length;
+      },
       e => this.errorMessage = e);
   }
 }

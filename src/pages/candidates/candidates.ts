@@ -30,7 +30,7 @@ export class CandidatesPage implements OnInit {
         this.workflow = _.first(w);
         if (!this.own) {
           this.currentLocationService.candidates$.subscribe(
-            candidates => this.candidates = candidates);
+            candidates => this.candidates = _.filter(candidates, { "status": "active" }));
         } else {
           console.log(this.auth.user);
           this.candidatesProvider.getOwn((this.auth.user as any).user_id).subscribe(
