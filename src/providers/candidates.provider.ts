@@ -126,7 +126,8 @@ function toCandidate(r: any): Candidate {
 function toUser(r: any): User {
   let user = <User>({
     sub: r.sub,
-    name: r.name
+    name: r.name,
+    role: r.role
   })
   return user;
 }
