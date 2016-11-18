@@ -11,9 +11,11 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
   <googleMap [panoramaOnly]="true"></googleMap>
+  <button ion-button icon-only full (click)="initialiceWorkflow()">
+    <ion-icon name="camera"></ion-icon>
+  </button>
   <div [ngSwitch]="current_task?.id && checkTypeInput()">
     <workflow_input [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'input'"></workflow_input>
     <workflow_choice [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'choice'"></workflow_choice>

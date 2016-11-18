@@ -1,6 +1,11 @@
-<label>{{question}}</label>
-<div *ngFor='let answer of answers'>
-    <input type="checkbox" (click)="toggleValue(answer.label)" name="choice"> {{answer.label}}<br>
-</div>
+<p padding>
+    {{question}}
+</p>
+<ion-list>
+    <ion-item *ngFor='let answer of answers'>
+        <ion-label>{{answer.label}}</ion-label>
+        <ion-checkbox></ion-checkbox>
+    </ion-item>
+</ion-list>
 
-<input type="button" (click)="next()" value="{{isFinalQuestion() ? 'Finalizar' : 'Siguiente Pregunta'}}" />
+<button ion-button full padding (click)="next()">{{isFinalQuestion() ? 'Finalizar' : 'Siguiente'}}</button>

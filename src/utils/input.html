@@ -1,4 +1,8 @@
-<label>{{question}}</label>
-<input #value /> <br>
+<p padding>
+    {{question}}
+</p>
+<ion-item>
+    <ion-input #value placeholder="Ingrese su respuesta ..."></ion-input>
+</ion-item>
 
-<input type="button" (click)="next(value.value)" value="{{isFinalQuestion() ? 'Finalizar' : 'Siguiente Pregunta'}}" />
+<button ion-button full padding (click)="next(value.value)">{{isFinalQuestion() ? 'Finalizar' : 'Siguiente'}}</button>

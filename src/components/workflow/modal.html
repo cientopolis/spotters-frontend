@@ -1,0 +1,20 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Clasificación
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="dismiss()">
+        <span color="primary" showWhen="ios">Cancelar</span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div [ngSwitch]="current_task?.id && checkTypeInput()">
+        <workflow_input [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'input'"></workflow_input>
+        <workflow_choice [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'choice'"></workflow_choice>
+        <workflow_radio [task]="current_task" (nextQuestion)="nextQuestion($event)" *ngSwitchCase="'radio'"></workflow_radio>
+    </div>
+</ion-content>

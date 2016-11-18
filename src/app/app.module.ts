@@ -36,7 +36,8 @@ import { MessageItemComponent } from '../components/candidateCard/messageItem.co
 import { AuthService } from '../services/auth/auth.service';
 import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
-import { WorkFlowRadio }from '../utils/radio.component';
+import { WorkFlowRadio } from '../utils/radio.component';
+import { ModalContentPage } from '../components/workflow/modal';
 
 moment.locale('es');
 
@@ -69,7 +70,8 @@ export function getAuthHttp(http) {
     MessageItemComponent,
     WorkFlowInput,
     WorkFlowChoice,
-    WorkFlowRadio
+    WorkFlowRadio,
+    ModalContentPage
   ],
   imports: [
     MomentModule,
@@ -87,7 +89,8 @@ export function getAuthHttp(http) {
     HomePage,
     TabsPage,
     ExpertPage,
-    TutorialPage
+    TutorialPage,
+    ModalContentPage
   ],
   providers: [
     NewsProvider,
