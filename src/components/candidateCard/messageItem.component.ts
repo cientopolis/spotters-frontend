@@ -15,6 +15,7 @@ export class MessageItemComponent implements OnInit {
     positiveVotes: number = 0;
     negativeVotes: number = 0;
     userVoted: boolean = false;
+    ownMessage: boolean = false;
     errorMessage: string = '';
 
     constructor(public auth: AuthService, private messageVotesProvider: MessageVotesProvider) {
@@ -37,6 +38,7 @@ export class MessageItemComponent implements OnInit {
         this.userVoted = this.auth.authenticated() && !_.isUndefined(_.find(this.message.votes, v => {
             return v.user.sub === (this.auth.user as any).user_id; // Corregir este hack
         }));
+        this.ownMessage = this.auth.authenticated() && this.message.user.sub === (this.auth.user as any).user_id;
     }
 
     ngOnInit(): void {
