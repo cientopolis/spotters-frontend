@@ -32,6 +32,8 @@
   
   <button ion-button block [hidden]="!isExpert" [navPush]="expertPage">Panel de Experto</button>
 
+  <button ion-button block [navPush]="candidatesPage" [navParams]="{own: true}">Mis Candidatos</button>
+
   <button ion-button block [navPush]="tutorialPage">Tutorial</button>
 
   <button ion-button block (click)="auth.logout()">Logout</button>

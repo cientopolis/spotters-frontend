@@ -54,6 +54,15 @@ export class CandidatesProvider {
     return candidates$;
   }
 
+  getOwn(sub: string): Observable<Candidate[]> {
+    let candidates$ = this.http
+      .get(`${this.candidatesUrl}?sub=${sub}`, { headers: this.getHeaders() })
+      .map(mapCandidates)
+      .catch(handleError);
+
+    return candidates$;
+  }
+
   setStatus(candidate: Candidate, status: string): Observable<Candidate> {
     let candidatesUrl = `${constants.endpoint}/candidates/${candidate.id}.json`;
     let candidate$ = this.authHttp

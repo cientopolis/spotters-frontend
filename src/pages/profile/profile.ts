@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthService } from '../../services/auth/auth.service';
+import { CandidatesPage } from '../candidates/candidates';
 import { ExpertPage } from '../expert/expert';
 import { TutorialPage } from '../tutorial/tutorial';
 import { UserProvider } from '../../providers/user.provider';
@@ -10,6 +11,7 @@ import { UserProvider } from '../../providers/user.provider';
   templateUrl: 'profile.html'
 })
 export class ProfilePage {
+  candidatesPage = CandidatesPage;
   expertPage = ExpertPage;
   tutorialPage = TutorialPage;
   isExpert: boolean = false;

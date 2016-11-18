@@ -8,4 +8,5 @@
 
 <ion-content padding>
   <candidate-card [hidden]="!workflow" *ngFor="let candidate of candidates" [candidate]="candidate" [workflow]="workflow"></candidate-card>
+  <p [hidden]="candidates.length > 0">No hay candidatos para mostrar.</p>
 </ion-content>
