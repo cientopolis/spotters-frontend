@@ -22,7 +22,9 @@ export class PanoramaPage {
   }
 
   initialiceWorkflow() {
-    let modal = this.modalCtrl.create(ModalContentPage);
+    let modal = this.modalCtrl.create(ModalContentPage, {
+      location: this.currentLocation.getLocation()
+    });
     modal.present();
   }
 }

@@ -4,18 +4,22 @@ import { Platform, NavParams, ViewController } from 'ionic-angular';
 import { Workflow } from '../../models/workflow';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { Task } from '../../models/task';
-import _ from "lodash";
+
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
+import { constants } from '../../app/app.constants';
+import { Location } from '../../models/location';
+
+import _ from "lodash";
 
 @Component({
     templateUrl: 'modal.html',
 })
 export class ModalContentPage implements OnInit {
-    character;
     workflow: Workflow;
+    location: Location;
     @Input() current_task: Task;
-    private classification: {
+    classification: {
         data: any;
     };
 
@@ -28,8 +32,10 @@ export class ModalContentPage implements OnInit {
         public currentLocation: CurrentLocationService
     ) {
         this.classification = {
-            data: new Array()
-        }
+            data: []
+        };
+
+        this.location = this.params.get('location');
     }
 
     dismiss() {
@@ -40,7 +46,7 @@ export class ModalContentPage implements OnInit {
         if (this.current_task.multiple) {
             this.classification.data.push({
                 question: this.current_task.id,
-                answer: new Array()
+                answer: []
             });
 
             //como es multiple, itero los valores y se los añado
@@ -92,6 +98,10 @@ export class ModalContentPage implements OnInit {
                 }
             }
         }
+    }
+
+    getUrl(): string {
+        return `https://maps.googleapis.com/maps/api/streetview?size=640x480&location=${this.location.lat},${this.location.lng}&heading=${this.location.heading}&pitch=${this.location.pitch}&fov=120&key=${constants.googleKey}`;
     }
 
     ngOnInit(): void {

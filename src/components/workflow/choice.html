@@ -1,0 +1,11 @@
+<p padding>
+    {{question}}
+</p>
+<ion-list radio-group>
+    <ion-item *ngFor='let answer of answers'>
+        <ion-label>{{answer.label}}</ion-label>
+        <ion-radio (click)="setNextId(answer.next_id, answer.label)" value="{{answer.label}}"></ion-radio>
+    </ion-item>
+</ion-list>
+
+<button ion-button full padding (click)="next()">Siguiente</button>
