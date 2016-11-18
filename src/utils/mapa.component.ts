@@ -72,7 +72,7 @@ export class MapaComponent implements OnInit, OnChanges {
                     this.markers.push(new _mapsApi.Marker({
                         position: new _mapsApi.LatLng(candidate.lat, candidate.lng),
                         map: this.map,
-                        icon: `/assets/markers/marker_${candidate.status}.png`
+                        icon: `assets/markers/marker_${candidate.status}.png`
                     }));
                 });
             });

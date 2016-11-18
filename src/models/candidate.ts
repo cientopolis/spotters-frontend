@@ -4,7 +4,7 @@ import { Message } from './message';
 
 export interface Candidate {
     id: number;
-    status: number;
+    status: string;
     lng: number;
     lat: number;
     heading: number;
