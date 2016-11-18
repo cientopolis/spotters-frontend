@@ -8,9 +8,17 @@ Front end for the spotters framework
 npm install -g ionic
 ```
 
+Then clone this repository and:
+```
+cd spotters-frontend
+npm install
+cp src/app/app.constants.sample.ts src/app/app.constants.ts
+```
+
+And complete app.constants.ts with your own keys.
+
 ## Running
 
 ```
-cd spotters-frontend
 ionic serve
 ```

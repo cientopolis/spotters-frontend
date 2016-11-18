@@ -2,7 +2,7 @@ import { Storage } from '@ionic/storage';
 import { AuthHttp, JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-import { Auth0Vars } from '../../auth0-variables';
+import { Auth0Vars } from '../../app/app.constants';
 import { UserProvider } from '../../providers/user.provider';
 
 // Avoid name not found warnings
