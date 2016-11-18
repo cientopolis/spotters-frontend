@@ -5,6 +5,9 @@
     <button item-right outline ion-button icon-only color="secondary" (click)="toggleMap()">
       <ion-icon name="navigate"></ion-icon>
     </button>
+    <button item-right ion-button icon-only clear [hidden]="!expert || candidate.status !== 'active'" (click)="presentActionSheet()">
+      <ion-icon name="more"></ion-icon>
+    </button>
   </ion-item>
   <img id="picture{{candidate.id}}" [hidden]="displayPanorama" [src]="getUrl(candidate)" />
   <googleMap [hidden]="!displayPanorama" [panoramaOnly]="true" [fix]="candidate.id" [candidate]="candidate"></googleMap>

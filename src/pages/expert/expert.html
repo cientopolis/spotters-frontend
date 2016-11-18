@@ -26,4 +26,5 @@
     </ion-item>
   </ion-list>
   <candidate-card *ngFor="let candidate of candidates" [candidate]="candidate" [workflow]="workflow" [expert]="expert"></candidate-card>
+  <p [hidden]="candidates.length > 0">No hay candidatos en el estado seleccionado.</p>
 </ion-content>

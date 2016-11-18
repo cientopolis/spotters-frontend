@@ -29,11 +29,11 @@ export class MapaComponent implements OnInit, OnChanges {
     markers: any[] = [];
 
     constructor(public mapLoader: GoogleMapsLoader, public currentLocationService: CurrentLocationService) {
-        this.fix = Array(10+1).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 10); // Random string
+        this.fix = Array(10 + 1).join((Math.random().toString(36) + '00000000000000000').slice(2, 18)).slice(0, 10); // Random string
     }
 
     updateCurrentPosition() {
-        if (this.panorama) {
+        if (!_.isNil(this.panorama)) {
             let l = <Location>({
                 lat: this.panorama.getPosition().lat(),
                 lng: this.panorama.getPosition().lng(),
@@ -85,9 +85,12 @@ export class MapaComponent implements OnInit, OnChanges {
                     pov: pov
                 }
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById(`streetview_${this.fix}`), panoramaProp);
-                _mapsApi.event.addListener(this.panorama, 'position_changed', () => {
-                    this.updateCurrentPosition();
-                });
+
+                if (_.isNil(this.candidate)) {
+                    _mapsApi.event.addListener(this.panorama, 'position_changed', () => {
+                        this.updateCurrentPosition();
+                    });
+                }
 
                 if (!this.panoramaOnly) {
                     let mapProp = {
@@ -125,7 +128,6 @@ export class MapaComponent implements OnInit, OnChanges {
                     }
                 });
         } else { // Panorama for a single candidate
-            console.log(this.candidate);
             this.setMap({
                 lat: this.candidate.lat,
                 lng: this.candidate.lng

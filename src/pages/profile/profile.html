@@ -30,7 +30,7 @@
     </ion-item>
   </ion-card>
   
-  <button ion-button block [navPush]="expertPage">Panel de Experto</button>
+  <button ion-button block [hidden]="!isExpert" [navPush]="expertPage">Panel de Experto</button>
 
   <button ion-button block [navPush]="tutorialPage">Tutorial</button>
 

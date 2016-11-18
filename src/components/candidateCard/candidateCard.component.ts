@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { ActionSheetController } from 'ionic-angular';
 import { AuthService } from '../../services/auth/auth.service';
+import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
 import { Workflow } from '../../models/workflow';
 import { Task } from '../../models/task';
@@ -19,8 +21,33 @@ export class CandidateCardComponent {
   displayNewClassification: boolean = false;
   errorMessage: string = '';
 
-  constructor(private auth: AuthService) {
+  constructor(public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
 
+  }
+
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Clasificación',
+      buttons: [
+        {
+          text: 'Descartar',
+          role: 'destructive',
+          handler: () => {
+            this.candidatesProvider.setStatus(this.candidate, 'discarded').subscribe(
+              c => {
+                this.candidate = c;
+              },
+              e => this.errorMessage = e
+            );
+          }
+        }, {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
   getUrl(candidate: Candidate): string {

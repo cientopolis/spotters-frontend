@@ -33,11 +33,19 @@ export class UserProvider {
             .catch(handleError);
     }
 
-    tutorialComplete(): Observable<any> {
+    tutorialComplete(): Observable<boolean> {
         let url = `${constants.endpoint}/users/tutorial_complete.json`;
         return this.authHttp
             .get(url, { headers: this.getHeaders() })
             .map(r => r.json().tutorial_complete)
+            .catch(handleError);
+    }
+
+    isExpert(): Observable<boolean> {
+        let url = `${constants.endpoint}/users/is_expert.json`;
+        return this.authHttp
+            .get(url, { headers: this.getHeaders() })
+            .map(r => r.json().is_expert)
             .catch(handleError);
     }
 

@@ -82,7 +82,7 @@ export class ClassificationItemComponent implements OnInit {
     this.positiveVotes = _.filter(this.classification.votes, { 'positive': true }).length;
     this.negativeVotes = this.classification.votes.length - this.positiveVotes;
     this.userVoted = this.auth.authenticated() && !_.isUndefined(_.find(this.classification.votes, v => {
-      return v.user.sub === (this.auth.user as any).user_id; // Corregir este hack
+      return v.user.sub === (this.auth.user as any).sub; // Corregir este hack
     }));
   }
 

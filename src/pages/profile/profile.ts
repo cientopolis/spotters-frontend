@@ -12,18 +12,19 @@ import { UserProvider } from '../../providers/user.provider';
 export class ProfilePage {
   expertPage = ExpertPage;
   tutorialPage = TutorialPage;
+  isExpert: boolean = false;
 
   constructor(public navCtrl: NavController, public auth: AuthService, private userProvider: UserProvider) {
-    
+    this.userProvider.isExpert().subscribe(
+        e => this.isExpert = e,
+        e => console.log(e));
   }
 
   ionViewDidLoad() {
     this.auth.lock.on('authenticated', () => {
-      console.log('successfully signed in!');
       this.userProvider.tutorialComplete().subscribe(
         c => {
           if (this.auth.authenticated() && c === false) {
-            console.log('tutorial');
             this.navCtrl.push(TutorialPage);
           }
         },

@@ -54,6 +54,18 @@ export class CandidatesProvider {
     return candidates$;
   }
 
+  setStatus(candidate: Candidate, status: string): Observable<Candidate> {
+    let candidatesUrl = `${constants.endpoint}/candidates/${candidate.id}.json`;
+    let candidate$ = this.authHttp
+      .put(candidatesUrl, {
+        candidate: { status: status }
+      }, { headers: this.getHeaders() })
+      .map(r => toCandidate(r.json()))
+      .catch(handleError);
+
+    return candidate$;
+  }
+
   private getHeaders() {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
