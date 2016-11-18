@@ -1,4 +1,3 @@
-import { updateDate } from 'ionic-angular/es2015/util/datetime-util';
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { Task } from '../models/task';
 import _ from 'lodash';
@@ -20,7 +19,7 @@ export class WorkFlowChoice implements OnInit {
     selectNext: number;
     value: string;
 
-    constructor() {}
+    constructor() { }
 
     public next() {
         this.nextQuestion.emit({ next: this.selectNext, value: this.value });
