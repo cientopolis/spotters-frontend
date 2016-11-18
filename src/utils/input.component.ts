@@ -13,13 +13,20 @@ export class WorkFlowInput implements OnInit {
 
     question: string;
     next_id: number;
+    value: string;
 
     constructor() {
 
     }
 
-    public next(value) {
-        this.nextQuestion.emit({ next: this.next_id, value: value });
+    hasValue(): boolean {
+        return !_.isNil(this.value);
+    }
+
+    public next() {
+        if (this.hasValue()) {
+            this.nextQuestion.emit({ next: this.next_id, value: this.value });
+        }
     }
 
     public updateTask() {

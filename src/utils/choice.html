@@ -8,4 +8,4 @@
     </ion-item>
 </ion-list>
 
-<button ion-button full padding (click)="next()">Siguiente</button>
+<button ion-button full padding [disabled]="!hasValue()" (click)="next()">Siguiente</button>

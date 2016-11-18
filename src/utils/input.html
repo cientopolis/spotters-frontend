@@ -2,7 +2,7 @@
     {{question}}
 </p>
 <ion-item>
-    <ion-input #value placeholder="Ingrese su respuesta ..."></ion-input>
+    <ion-input [(ngModel)]="value" placeholder="Ingrese su respuesta ..."></ion-input>
 </ion-item>
 
-<button ion-button full padding (click)="next(value.value)">{{isFinalQuestion() ? 'Finalizar' : 'Siguiente'}}</button>
+<button ion-button full padding [disabled]="!hasValue()" (click)="next()">{{isFinalQuestion() ? 'Finalizar' : 'Siguiente'}}</button>

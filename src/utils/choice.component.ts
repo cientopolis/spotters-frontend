@@ -21,8 +21,14 @@ export class WorkFlowChoice implements OnInit {
 
     constructor() { }
 
+    hasValue(): boolean {
+        return !_.isNil(this.value);
+    }
+
     public next() {
-        this.nextQuestion.emit({ next: this.selectNext, value: this.value });
+        if (this.hasValue()) {
+            this.nextQuestion.emit({ next: this.selectNext, value: this.value });
+        }
     }
 
     public setNextId(next: number, selectedValue: string) {
