@@ -1,0 +1,12 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Spotters - Candidato</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <candidate-card *ngIf="candidate !== null" [candidate]="candidate" [workflow]="workflow"></candidate-card>
+  <p *ngIf="candidate === null">No existe el candidato.</p>
+</ion-content>

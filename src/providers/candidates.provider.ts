@@ -23,9 +23,8 @@ export class CandidatesProvider {
   }
 
   create(lng: number, lat: number, heading: number, pitch: number): Observable<Candidate> {
-    let cantidateUrl = `${constants.endpoint}/candidates.json`;
     let candidate$ = this.authHttp
-      .post(cantidateUrl, {
+      .post(this.candidatesUrl, {
         candidate: {
           status: 'active',
           lng: lng,
@@ -63,6 +62,16 @@ export class CandidatesProvider {
     return candidates$;
   }
 
+  getById(id: number): Observable<Candidate> {
+    let candidateUrl = `${constants.endpoint}/candidates/${id}.json`;
+    let candidates$ = this.http
+      .get(candidateUrl, { headers: this.getHeaders() })
+      .map(r => toCandidate(r.json()))
+      .catch(handleError);
+
+    return candidates$;
+  }
+
   setStatus(candidate: Candidate, status: string): Observable<Candidate> {
     let candidatesUrl = `${constants.endpoint}/candidates/${candidate.id}.json`;
     let candidate$ = this.authHttp
@@ -83,7 +92,6 @@ export class CandidatesProvider {
 }
 
 function handleError(error: any) {
-  console.log('ocurrio un error en la peticion');
   let errorMsg = error.message || `Yikes! There was was a problem with our hyperdrive device and we couldn't retrieve your data!`
   console.error(errorMsg);
 
@@ -115,7 +123,7 @@ function toCandidate(r: any): Candidate {
     lat: r.lat,
     lng: r.lng,
     owner: toUser(r.owner),
-    expert: r.expert ? toUser(r.expert) : null,
+    expert: !_.isNil(r.expert) ? toUser(r.expert) : null,
     classifications: mapClassifications(r.classifications),
     messages: mapMessages(r.messages),
     createdAt: r.created_at

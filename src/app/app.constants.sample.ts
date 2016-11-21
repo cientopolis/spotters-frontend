@@ -1,5 +1,5 @@
 // Copy this file to app.constants.ts an complete with your own keys
-export let constants = {
+export const constants = {
     endpoint: 'http://localhost:3000/api/v1',
     googleKey: ''
 }

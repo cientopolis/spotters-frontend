@@ -10,6 +10,7 @@ import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
 import { PanoramaPage } from '../pages/panorama/panorama';
 import { CandidatesPage } from '../pages/candidates/candidates';
+import { CandidatePage } from '../pages/candidate/candidate';
 import { ProfilePage } from '../pages/profile/profile';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -56,6 +57,7 @@ export function getAuthHttp(http) {
     MapPage,
     PanoramaPage,
     CandidatesPage,
+    CandidatePage,
     ProfilePage,
     HomePage,
     TabsPage,
@@ -81,6 +83,7 @@ export function getAuthHttp(http) {
         { component: MapPage, name: 'map', segment: 'map' },
         { component: PanoramaPage, name: 'panorama', segment: 'panorama' },
         { component: CandidatesPage, name: 'candidates', segment: 'candidates' },
+        { component: CandidatePage, name: 'candidate', segment: 'candidates/:id', defaultHistory: [CandidatesPage] },
         { component: ProfilePage, name: 'profile', segment: 'profile' },
         { component: TutorialPage, name: 'tutorial', segment: 'profile/tutorial', defaultHistory: [ProfilePage] },
         { component: ExpertPage, name: 'expert', segment: 'profile/expert', defaultHistory: [ProfilePage] }
@@ -95,6 +98,7 @@ export function getAuthHttp(http) {
     MapPage,
     PanoramaPage,
     CandidatesPage,
+    CandidatePage,
     ProfilePage,
     HomePage,
     TabsPage,
