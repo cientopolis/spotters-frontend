@@ -86,6 +86,10 @@ export class CandidateCardComponent {
   }
 
   share() {
-    SocialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
+    this.platform.ready().then(() => {
+      if (this.platform.is('cordova')) {
+        SocialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
+      }
+    });
   }
 }
