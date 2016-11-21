@@ -75,7 +75,17 @@ export function getAuthHttp(http) {
   ],
   imports: [
     MomentModule,
-    IonicModule.forRoot(SpottersApp)
+    IonicModule.forRoot(SpottersApp, {}, {
+      links: [
+        { component: HomePage, name: 'home' },
+        { component: MapPage, name: 'map', segment: 'map' },
+        { component: PanoramaPage, name: 'panorama', segment: 'panorama' },
+        { component: CandidatesPage, name: 'candidates', segment: 'candidates' },
+        { component: ProfilePage, name: 'profile', segment: 'profile' },
+        { component: TutorialPage, name: 'tutorial', segment: 'profile/tutorial', defaultHistory: [ProfilePage] },
+        { component: ExpertPage, name: 'expert', segment: 'profile/expert', defaultHistory: [ProfilePage] }
+      ]
+    })
   ],
   bootstrap: [
     IonicApp
