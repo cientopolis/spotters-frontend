@@ -4,7 +4,10 @@ import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesPage } from '../candidates/candidates';
 import { ExpertPage } from '../expert/expert';
 import { TutorialPage } from '../tutorial/tutorial';
+import { Configuration } from '../../models/configuration';
 import { UserProvider } from '../../providers/user.provider';
+import { CurrentLocationService } from '../../utils/currentLocation.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'page-profile',
@@ -14,12 +17,20 @@ export class ProfilePage {
   candidatesPage = CandidatesPage;
   expertPage = ExpertPage;
   tutorialPage = TutorialPage;
+  configuration: Configuration = null;
   isExpert: boolean = false;
+  errorMessage: string = '';
 
-  constructor(public navCtrl: NavController, public auth: AuthService, private userProvider: UserProvider) {
+  constructor(public navCtrl: NavController, public auth: AuthService, private currentLocation: CurrentLocationService, private userProvider: UserProvider) {
     this.userProvider.isExpert().subscribe(
-        e => this.isExpert = e,
-        e => console.log(e));
+      e => this.isExpert = e,
+      e => this.errorMessage = e);
+    currentLocation.configuration$.subscribe(
+      c => {
+        if (!_.isNil(c)) {
+          this.configuration = c;
+        }
+      });
   }
 
   ionViewDidLoad() {

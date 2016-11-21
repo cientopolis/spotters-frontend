@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { Candidate } from '../../models/candidate';
@@ -18,8 +19,14 @@ export class CandidatePage implements OnInit {
   errorMessage: string = '';
   configuration: Configuration = null;
 
-  constructor(private navParams: NavParams, public navCtrl: NavController, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
+  constructor(private navParams: NavParams, public navCtrl: NavController, private currentLocation: CurrentLocationService, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
     this.id = navParams.get('id');
+    currentLocation.configuration$.subscribe(
+      c => {
+        if (!_.isNil(c)) {
+          this.configuration = c;
+        }
+      });
   }
 
   getWorkflows(): void {

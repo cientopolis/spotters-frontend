@@ -20,8 +20,14 @@ export class CandidatesPage implements OnInit {
   errorMessage: string = '';
   configuration: Configuration = null;
 
-  constructor(private navParams: NavParams, public navCtrl: NavController, public currentLocationService: CurrentLocationService, public auth: AuthService, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
+  constructor(private navParams: NavParams, public navCtrl: NavController, public currentLocation: CurrentLocationService, public auth: AuthService, private candidatesProvider: CandidatesProvider, private workflowsProvider: WorkflowsProvider) {
     this.own = navParams.get('own');
+    currentLocation.configuration$.subscribe(
+      c => {
+        if (!_.isNil(c)) {
+          this.configuration = c;
+        }
+      });
   }
 
   getWorkflows(): void {
@@ -29,10 +35,9 @@ export class CandidatesPage implements OnInit {
       w => {
         this.workflow = _.first(w);
         if (!this.own) {
-          this.currentLocationService.candidates$.subscribe(
+          this.currentLocation.candidates$.subscribe(
             candidates => this.candidates = _.filter(candidates, { "status": "active" }));
         } else {
-          console.log(this.auth.user);
           this.candidatesProvider.getOwn((this.auth.user as any).user_id).subscribe(
             candidates => this.candidates = candidates);
         }

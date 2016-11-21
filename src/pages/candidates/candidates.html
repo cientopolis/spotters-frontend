@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Spotters - Candidatos</ion-title>
+    <ion-title *ngIf="configuration">{{configuration.title}} - Candidatos</ion-title>
   </ion-navbar>
 
 </ion-header>
