@@ -25,8 +25,13 @@
     <ion-col>
       <button ion-button color="primary" clear small icon-left (click)="initializeWorkflow()">
         <ion-icon name="add"></ion-icon>
-        Clasificación
+        Clasificar
       </button>
+    </ion-col>
+    <ion-col *ngIf="platform.is('cordova')">
+      <button ion-button color="primary" clear small icon-left (click)="share()">
+        <ion-icon name="share"></ion-icon>
+    </button>
     </ion-col>
   </ion-row>
 </ion-card>

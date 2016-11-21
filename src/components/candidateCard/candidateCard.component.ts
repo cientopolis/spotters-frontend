@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ActionSheetController, ModalController } from 'ionic-angular';
+import { ActionSheetController, ModalController, Platform } from 'ionic-angular';
+import { SocialSharing } from 'ionic-native';
 import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
@@ -22,7 +23,7 @@ export class CandidateCardComponent {
   displayNewClassification: boolean = false;
   errorMessage: string = '';
 
-  constructor(public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
+  constructor(public platform: Platform, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
 
   }
 
@@ -82,5 +83,9 @@ export class CandidateCardComponent {
       candidate: this.candidate
     });
     modal.present();
+  }
+
+  share() {
+    SocialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
   }
 }

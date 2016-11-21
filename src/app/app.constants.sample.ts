@@ -1,7 +1,8 @@
 // Copy this file to app.constants.ts an complete with your own keys
 export const constants = {
     endpoint: 'http://localhost:3000/api/v1',
-    googleKey: ''
+    googleKey: '',
+    domain: 'http://localhost:8100'
 }
 
 export class Auth0Vars {
