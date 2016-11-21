@@ -13,7 +13,7 @@
 
 <ion-content padding>
   <googleMap [panoramaOnly]="true"></googleMap>
-  <button ion-button icon-only full (click)="initializeWorkflow()">
+  <button ion-button icon-only full [disabled]="!insideBounds()" (click)="initializeWorkflow()">
     <ion-icon name="camera"></ion-icon>
   </button>
 </ion-content>

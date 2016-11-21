@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Configuration } from '../models/configuration';
+import { Point } from '../models/point';
 import { constants } from '../app/app.constants';
 
 import 'rxjs/Rx';
@@ -41,6 +42,10 @@ function mapConfigurations(response: Response): Configuration[] {
     return response.json().map(toConfiguration);
 }
 
+function mapPoints(r: any): Point[] {
+  return r.map(toPoint);
+}
+
 function toConfiguration(r: any): Configuration {
     let configuration = <Configuration>({
         id: r.id,
@@ -48,9 +53,18 @@ function toConfiguration(r: any): Configuration {
         lat: r.center.lat,
         lng: r.center.lng,
         zoom: r.zoom,
+        bounds: mapPoints(r.bounds),
         headingCenter: r.heading_center,
         pitchCenter: r.pitch_center,
         proximityDistance: r.proximityDistance
     });
     return configuration;
+}
+
+function toPoint(r: any): Point {
+  let point = <Point>({
+    lat: r.lat,
+    lng: r.lng
+  });
+  return point;
 }
