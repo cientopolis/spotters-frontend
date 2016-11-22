@@ -124,10 +124,11 @@ function toCandidate(r: any): Candidate {
     lng: r.lng,
     owner: toUser(r.owner),
     expert: !_.isNil(r.expert) ? toUser(r.expert) : null,
-    classifications: mapClassifications(r.classifications),
-    messages: mapMessages(r.messages),
+    classifications: !_.isNil(r.classifications) ? mapClassifications(r.classifications) : null,
+    messages:!_.isNil(r.messages) ?  mapMessages(r.messages) : null,
     createdAt: r.created_at
   });
+
   return candidate;
 }
 

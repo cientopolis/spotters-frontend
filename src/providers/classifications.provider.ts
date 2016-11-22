@@ -16,6 +16,22 @@ export class ClassificationsProvider {
 
   }
 
+  create(candidate: Candidate, data: string): Observable<Classification> {
+    let classificationsUrl = `${constants.endpoint}/candidates/${candidate.id}/classifications.json`;
+    let classification$ = this.authHttp
+      .post(classificationsUrl, {
+        classification: {
+          candidate: candidate,
+          data: data
+        }
+      }, { headers: this.getHeaders() })
+      .map(r => {
+        toClassification(r.json())
+      })
+      .catch(handleError);
+    return classification$;
+  }
+
   setStatus(candidate: Candidate, classification: Classification, status: string): Observable<Classification> {
     let classificationsUrl = `${constants.endpoint}/candidates/${candidate.id}/classifications/${classification.id}.json`;
     let classification$ = this.authHttp

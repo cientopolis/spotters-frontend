@@ -6,6 +6,7 @@ import { WorkflowsProvider } from '../../providers/workflows.provider';
 import { Task } from '../../models/task';
 
 import { CandidatesProvider } from '../../providers/candidates.provider';
+import { ClassificationsProvider } from '../../providers/classifications.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { constants } from '../../app/app.constants';
 import { Location } from '../../models/location';
@@ -31,7 +32,8 @@ export class ModalContentPage implements OnInit {
         public params: NavParams,
         public viewCtrl: ViewController,
         private candidatesProvider: CandidatesProvider,
-        public currentLocation: CurrentLocationService
+        public currentLocation: CurrentLocationService,
+        private classificationsProvider: ClassificationsProvider
     ) {
         this.classification = {
             data: []
@@ -71,6 +73,18 @@ export class ModalContentPage implements OnInit {
                 this.candidatesProvider.create(this.location.lng, this.location.lat, this.location.heading, this.location.pitch)
                     .subscribe(
                     c => {
+                        //Obtenido el candidato, persisto la clasificacion
+                        this.classificationsProvider.create(c, this.classification.data)
+                        .subscribe(
+                            classification => {
+                                console.log('Creacion de clasificacion correcta');
+                                console.log(classification);
+                            },
+                            e => {
+                                console.log('Ocurrio un error al crear la clasificacion para el candidato');
+                                console.log(e);
+                            }
+                        )
                         this.dismiss();
                     }, e => {
                         console.log('Ocurrio un error al persistir al candidato ...');
