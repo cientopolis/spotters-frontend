@@ -75,23 +75,35 @@ export class ModalContentPage implements OnInit {
                     c => {
                         //Obtenido el candidato, persisto la clasificacion
                         this.classificationsProvider.create(c, this.classification.data)
-                        .subscribe(
+                            .subscribe(
                             classification => {
                                 console.log('Creacion de clasificacion correcta');
-                                console.log(classification);
+                                this.dismiss();
                             },
                             e => {
                                 console.log('Ocurrio un error al crear la clasificacion para el candidato');
                                 console.log(e);
+                                this.dismiss();
                             }
-                        )
-                        this.dismiss();
+                            )
                     }, e => {
                         console.log('Ocurrio un error al persistir al candidato ...');
                         this.dismiss();
                     });
             } else if (!_.isNil(this.candidate)) {
                 // Crear la clasificación
+                this.classificationsProvider.create(this.candidate, this.classification.data)
+                    .subscribe(
+                    classification => {
+                        console.log('Creacion de clasificacion correcta');
+                        this.dismiss();
+                    },
+                    e => {
+                        console.log('Ocurrio un error al crear la clasificacion para el candidato');
+                        console.log(e);
+                        this.dismiss();
+                    }
+                    )
             }
         }
         else {

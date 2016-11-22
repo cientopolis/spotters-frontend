@@ -21,7 +21,6 @@ export class ClassificationsProvider {
     let classification$ = this.authHttp
       .post(classificationsUrl, {
         classification: {
-          candidate: candidate,
           data: data
         }
       }, { headers: this.getHeaders() })
