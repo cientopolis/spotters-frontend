@@ -82,7 +82,7 @@ export class CandidatesProvider {
     return candidate$;
   }
 
-  private getHeaders() {
+  private getHeaders() {  
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     return headers;

@@ -11,6 +11,7 @@ import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { constants } from '../../app/app.constants';
 import { Location } from '../../models/location';
 import { Candidate } from '../../models/candidate';
+import { ToastController } from 'ionic-angular';
 
 import _ from "lodash";
 
@@ -33,7 +34,8 @@ export class ModalContentPage implements OnInit {
         public viewCtrl: ViewController,
         private candidatesProvider: CandidatesProvider,
         public currentLocation: CurrentLocationService,
-        private classificationsProvider: ClassificationsProvider
+        private classificationsProvider: ClassificationsProvider,
+        public toastCtrl: ToastController
     ) {
         this.classification = {
             data: []
@@ -43,8 +45,40 @@ export class ModalContentPage implements OnInit {
         this.candidate = this.params.get('candidate');
     }
 
-    dismiss() {
+    dismiss(status: boolean) {
+        if (status) {
+            const toast = this.toastCtrl.create({
+                    message: 'Clasificacion agregada correctamente',
+                    showCloseButton: true,
+                    closeButtonText: 'Cerrar'
+            });
+            toast.present();
+        }
+        else {
+            const toast = this.toastCtrl.create({
+                    message: 'Ha ocurrido un error!',
+                    showCloseButton: true,
+                    closeButtonText: 'Aceptar'
+            });
+            toast.present();
+        }
+
         this.viewCtrl.dismiss();
+    }
+
+    createClassification(candidate: Candidate) {
+        this.classificationsProvider
+            .create(candidate, this.classification.data)
+            .subscribe(
+                classification => {
+                    this.dismiss(true);
+                },
+                e => {
+                    console.log('Ocurrio un error al crear la clasificacion para el candidato');
+                    console.log(e);
+                    this.dismiss(false);
+                }
+            )
     }
 
     public nextQuestion($event) {
@@ -74,36 +108,14 @@ export class ModalContentPage implements OnInit {
                     .subscribe(
                     c => {
                         //Obtenido el candidato, persisto la clasificacion
-                        this.classificationsProvider.create(c, this.classification.data)
-                            .subscribe(
-                            classification => {
-                                console.log('Creacion de clasificacion correcta');
-                                this.dismiss();
-                            },
-                            e => {
-                                console.log('Ocurrio un error al crear la clasificacion para el candidato');
-                                console.log(e);
-                                this.dismiss();
-                            }
-                            )
+                        this.createClassification(c);
                     }, e => {
                         console.log('Ocurrio un error al persistir al candidato ...');
-                        this.dismiss();
+                        this.dismiss(false);
                     });
             } else if (!_.isNil(this.candidate)) {
                 // Crear la clasificación
-                this.classificationsProvider.create(this.candidate, this.classification.data)
-                    .subscribe(
-                    classification => {
-                        console.log('Creacion de clasificacion correcta');
-                        this.dismiss();
-                    },
-                    e => {
-                        console.log('Ocurrio un error al crear la clasificacion para el candidato');
-                        console.log(e);
-                        this.dismiss();
-                    }
-                    )
+                this.createClassification(this.candidate);
             }
         }
         else {
