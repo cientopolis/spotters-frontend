@@ -46,23 +46,13 @@ export class ModalContentPage implements OnInit {
     }
 
     dismiss(status: boolean) {
-        if (status) {
-            const toast = this.toastCtrl.create({
-                    message: 'Clasificacion agregada correctamente',
-                    showCloseButton: true,
-                    closeButtonText: 'Cerrar'
-            });
-            toast.present();
-        }
-        else {
-            const toast = this.toastCtrl.create({
-                    message: 'Ha ocurrido un error!',
-                    showCloseButton: true,
-                    closeButtonText: 'Aceptar'
-            });
-            toast.present();
-        }
-
+        let message = (status) ? 'Clasificacion agregada correctamente' : 'Ha ocurrido un error!'
+        const toast = this.toastCtrl.create({
+            message: message,
+            showCloseButton: true,
+            closeButtonText: 'Aceptar'
+        });
+        toast.present();
         this.viewCtrl.dismiss();
     }
 
