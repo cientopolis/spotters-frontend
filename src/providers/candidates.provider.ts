@@ -139,11 +139,11 @@ function toUser(r: any): User {
   return user;
 }
 
-function toClassification(r: any): Classification {
+function toClassification(r: any): Classification { 
   let classification = <Classification>({
     id: r.id,
     status: r.status,
-    data: JSON.parse(r.data),
+    data: r.data,
     user: toUser(r.user),
     votes: mapVotes(r.classification_votes),
     createdAt: r.created_at
