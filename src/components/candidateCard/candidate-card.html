@@ -12,7 +12,7 @@
   <img id="picture{{candidate.id}}" *ngIf="!displayPanorama" [src]="getUrl(candidate)" />
   <googleMap [hidden]="!displayPanorama" [panoramaOnly]="true" [fix]="candidate.id" [candidate]="candidate"></googleMap>
   <ion-card-content text-wrap>
-    <classification-list [candidate]="candidate" [classifications]="classifications" [workflow]="workflow" [expert]="expert"></classification-list>
+    <classification-list [candidate]="candidate" [classifications]="candidate.classifications" [workflow]="workflow" [expert]="expert"></classification-list>
     <message-list [candidate]="candidate" [messages]="candidate.messages" [displayMessages]="displayMessages"></message-list>
   </ion-card-content>
   <ion-row>

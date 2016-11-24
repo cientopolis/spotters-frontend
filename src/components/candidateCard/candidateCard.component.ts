@@ -19,7 +19,6 @@ export class CandidateCardComponent implements OnInit {
   @Input() candidate: Candidate = null;
   @Input() workflow: Workflow = null;
   @Input() expert: boolean = false;
-  classifications: Classification[] = [];
   displayMessages: boolean = false;
   displayPanorama: boolean = false;
   displayNewClassification: boolean = false;
@@ -86,10 +85,10 @@ export class CandidateCardComponent implements OnInit {
     });
     modal.onDidDismiss(data => {
       if (!_.isNil(data.classification)) {
+        //el elemento PUSH de javascript es mutable, por lo tanto, la vista nunca se entera que hay un elemento nuevo en el arreglo
+        //http://stackoverflow.com/questions/39196766/angular-2-do-not-refresh-view-after-array-push-in-ngoninit-promise
         this.candidate.classifications.push(data.classification);
-        this._zone.run(() => {
-          this.classifications = this.candidate.classifications;
-        });
+        this.candidate.classifications = this.candidate.classifications.slice(); 
       }
     });
     modal.present();
@@ -104,6 +103,6 @@ export class CandidateCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.classifications = this.candidate.classifications;
   }
+  
 }
