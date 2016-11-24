@@ -86,6 +86,10 @@ export class ClassificationItemComponent implements OnInit {
     }));
   }
 
+  parsedData() {
+    return JSON.parse(this.classification.data);
+  }
+
   ngOnInit(): void {
     this.calculateVotes();
   }

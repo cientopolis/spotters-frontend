@@ -1,13 +1,13 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title *ngIf="configuration">{{configuration.title}} - Panorama</ion-title>
+    <ion-title *ngIf="configuration">{{configuration.title}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <googleMap [panoramaOnly]="true"></googleMap>
-  <button ion-button icon-only full [disabled]="!insideBounds()" (click)="initializeWorkflow()">
+  <button ion-button icon-only full [disabled]="!insideBounds() || !auth.authenticated()" (click)="initializeWorkflow()">
     <ion-icon name="camera"></ion-icon>
   </button>
 </ion-content>

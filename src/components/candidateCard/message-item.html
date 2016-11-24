@@ -1,15 +1,15 @@
 <ion-item>
   <p>{{message.text}} publicado {{message.createdAt | amTimeAgo}} por 
-    <span [hidden]="message.user.role === 'expert'" class="author">{{message.user.name}}</span>
-    <ion-badge [hidden]="message.user.role !== 'expert'" color="secondary">{{message.user.name}}</ion-badge>
+    <span *ngIf="message.user.role !== 'expert'" class="author">{{message.user.name}}</span>
+    <ion-badge *ngIf="message.user.role === 'expert'" color="secondary">{{message.user.name}}</ion-badge>
   </p>
   <ion-item>
     <ion-badge item-left color="secondary">{{positiveVotes}}</ion-badge>
     <ion-badge item-left color="danger">{{negativeVotes}}</ion-badge>
-    <button [hidden]="userVoted || !auth.authenticated() || ownMessage" item-right outline ion-button icon-only color="secondary" (click)="vote(true)">
+    <button *ngIf="!userVoted && auth.authenticated() && !ownMessage" item-right outline ion-button icon-only color="secondary" (click)="vote(true)">
       <ion-icon name="arrow-up"></ion-icon>
     </button>
-    <button [hidden]="userVoted || !auth.authenticated() || ownMessage" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
+    <button *ngIf="!userVoted && auth.authenticated() && !ownMessage" item-right outline ion-button icon-only color="danger" (click)="vote(false)">
       <ion-icon name="arrow-down"></ion-icon>
     </button>
   </ion-item>

@@ -11,6 +11,7 @@ import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { constants } from '../../app/app.constants';
 import { Location } from '../../models/location';
 import { Candidate } from '../../models/candidate';
+import { Classification } from '../../models/classification';
 import { ToastController } from 'ionic-angular';
 
 import _ from "lodash";
@@ -19,10 +20,10 @@ import _ from "lodash";
     templateUrl: 'modal.html',
 })
 export class ModalContentPage implements OnInit {
-    workflow: Workflow;
+    workflow: Workflow = null;
     location: Location = null;
     candidate: Candidate = null;
-    @Input() current_task: Task;
+    @Input() current_task: Task = null;
     classification: {
         data: any;
     };
@@ -45,30 +46,28 @@ export class ModalContentPage implements OnInit {
         this.candidate = this.params.get('candidate');
     }
 
-    dismiss(status: boolean) {
-        let message = (status) ? 'Clasificacion agregada correctamente' : 'Ha ocurrido un error!'
-        const toast = this.toastCtrl.create({
-            message: message,
-            showCloseButton: true,
-            closeButtonText: 'Aceptar'
+    dismiss(status?: boolean, classification?: Classification) {
+        if (!_.isUndefined(status)) {
+            let message = (status) ? 'Clasificacion agregada correctamente' : 'Ha ocurrido un error!'
+            const toast = this.toastCtrl.create({
+                message: message,
+                showCloseButton: true,
+                closeButtonText: 'Aceptar'
+            });
+            toast.present();
+        }
+        this.viewCtrl.dismiss({
+            classification: classification
         });
-        toast.present();
-        this.viewCtrl.dismiss();
     }
 
     createClassification(candidate: Candidate) {
         this.classificationsProvider
-            .create(candidate, this.classification.data)
-            .subscribe(
-                classification => {
-                    this.dismiss(true);
-                },
-                e => {
-                    console.log('Ocurrio un error al crear la clasificacion para el candidato');
-                    console.log(e);
-                    this.dismiss(false);
-                }
-            )
+            .create(candidate, JSON.stringify(this.classification.data))
+            .subscribe(classification => {
+                this.dismiss(true, classification);
+            },
+            e => this.dismiss(false));
     }
 
     public nextQuestion($event) {

@@ -1,8 +1,8 @@
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AuthService } from '../../services/auth/auth.service';
 import { Configuration } from '../../models/configuration';
-
 import { ModalController } from 'ionic-angular';
 import { ModalContentPage } from '../../components/workflow/modal';
 import inside from 'point-in-polygon';
@@ -20,7 +20,7 @@ export class PanoramaPage {
   polygon: any[] = [];
   errorMessage: string;
 
-  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public currentLocation: CurrentLocationService) {
+  constructor(public modalCtrl: ModalController, public auth: AuthService, public navCtrl: NavController, public currentLocation: CurrentLocationService) {
     currentLocation.configuration$.subscribe(
       c => {
         if (!_.isNil(c)) {

@@ -24,9 +24,7 @@ export class ClassificationsProvider {
           data: data
         }
       }, { headers: this.getHeaders() })
-      .map(r => {
-        toClassification(r.json())
-      })
+      .map(r => toClassification(r.json()))
       .catch(handleError);
     return classification$;
   }

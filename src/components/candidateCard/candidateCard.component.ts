@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController, Platform } from 'ionic-angular';
 import { SocialSharing } from 'ionic-native';
 import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
+import { Classification } from '../../models/classification';
 import { Workflow } from '../../models/workflow';
 import { Task } from '../../models/task';
 import { constants } from '../../app/app.constants';
@@ -14,16 +15,17 @@ import _ from 'lodash';
   selector: 'candidate-card',
   templateUrl: 'candidate-card.html'
 })
-export class CandidateCardComponent {
+export class CandidateCardComponent implements OnInit {
   @Input() candidate: Candidate = null;
   @Input() workflow: Workflow = null;
   @Input() expert: boolean = false;
+  classifications: Classification[] = [];
   displayMessages: boolean = false;
   displayPanorama: boolean = false;
   displayNewClassification: boolean = false;
   errorMessage: string = '';
 
-  constructor(public platform: Platform, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
+  constructor(public _zone: NgZone, public platform: Platform, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
 
   }
 
@@ -82,6 +84,14 @@ export class CandidateCardComponent {
     let modal = this.modalCtrl.create(ModalContentPage, {
       candidate: this.candidate
     });
+    modal.onDidDismiss(data => {
+      if (!_.isNil(data.classification)) {
+        this.candidate.classifications.push(data.classification);
+        this._zone.run(() => {
+          this.classifications = this.candidate.classifications;
+        });
+      }
+    });
     modal.present();
   }
 
@@ -91,5 +101,9 @@ export class CandidateCardComponent {
         SocialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
       }
     });
+  }
+
+  ngOnInit() {
+    this.classifications = this.candidate.classifications;
   }
 }

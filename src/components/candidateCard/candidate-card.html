@@ -5,14 +5,14 @@
     <button item-right outline ion-button icon-only color="secondary" (click)="toggleMap()">
       <ion-icon name="navigate"></ion-icon>
     </button>
-    <button item-right ion-button icon-only clear [hidden]="!expert || candidate.status !== 'active'" (click)="presentActionSheet()">
+    <button item-right ion-button icon-only clear *ngIf="expert || candidate.status === 'active'" (click)="presentActionSheet()">
       <ion-icon name="more"></ion-icon>
     </button>
   </ion-item>
-  <img id="picture{{candidate.id}}" [hidden]="displayPanorama" [src]="getUrl(candidate)" />
+  <img id="picture{{candidate.id}}" *ngIf="!displayPanorama" [src]="getUrl(candidate)" />
   <googleMap [hidden]="!displayPanorama" [panoramaOnly]="true" [fix]="candidate.id" [candidate]="candidate"></googleMap>
   <ion-card-content text-wrap>
-    <classification-list [candidate]="candidate" [classifications]="candidate.classifications" [workflow]="workflow" [expert]="expert"></classification-list>
+    <classification-list [candidate]="candidate" [classifications]="classifications" [workflow]="workflow" [expert]="expert"></classification-list>
     <message-list [candidate]="candidate" [messages]="candidate.messages" [displayMessages]="displayMessages"></message-list>
   </ion-card-content>
   <ion-row>
@@ -23,7 +23,7 @@
     </button>
     </ion-col>
     <ion-col>
-      <button ion-button color="primary" clear small icon-left (click)="initializeWorkflow()">
+      <button ion-button color="primary" clear small icon-left [disabled]="!auth.authenticated()" (click)="initializeWorkflow()">
         <ion-icon name="add"></ion-icon>
         Clasificar
       </button>

@@ -1,8 +1,8 @@
 {
-  "name": "ionic-hello-world",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
-  "private": true,
+  "name": "spotters",
+  "author": "Ezequiel Claramunt y Agustín Marisi",
+  "homepage": "http://www.cientopolis.org",
+  "private": false,
   "scripts": {
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve"
@@ -49,5 +49,5 @@
       "locator": "ios"
     }
   ],
-  "description": "spotters-ionic: An Ionic project"
+  "description": "spotters-frontend"
 }
