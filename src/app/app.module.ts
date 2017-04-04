@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import moment from 'moment';
 import 'moment/src/locale/es';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { MomentModule } from 'angular2-moment';
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
@@ -39,6 +39,9 @@ import { WorkFlowInput } from '../utils/input.component';
 import { WorkFlowChoice } from '../utils/choice.component';
 import { WorkFlowRadio } from '../utils/radio.component';
 import { ModalContentPage } from '../components/workflow/modal';
+
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 moment.locale('es');
 
@@ -107,6 +110,9 @@ export function getAuthHttp(http) {
     ModalContentPage
   ],
   providers: [
+    StatusBar,
+    SplashScreen,
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
     NewsProvider,
     UserProvider,
     ConfigurationProvider,
