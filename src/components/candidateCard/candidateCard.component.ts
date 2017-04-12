@@ -1,6 +1,6 @@
 import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { ActionSheetController, ModalController, Platform } from 'ionic-angular';
-import { SocialSharing } from 'ionic-native';
+import { SocialSharing } from '@ionic-native/social-sharing';
 import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
@@ -24,7 +24,7 @@ export class CandidateCardComponent implements OnInit {
   displayNewClassification: boolean = false;
   errorMessage: string = '';
 
-  constructor(public _zone: NgZone, public platform: Platform, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider) {
+  constructor(public _zone: NgZone, public platform: Platform, public modalCtrl: ModalController, public actionSheetCtrl: ActionSheetController, private auth: AuthService, private candidatesProvider: CandidatesProvider, private socialSharing: SocialSharing) {
 
   }
 
@@ -97,7 +97,7 @@ export class CandidateCardComponent implements OnInit {
   share() {
     this.platform.ready().then(() => {
       if (this.platform.is('cordova')) {
-        SocialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
+        this.socialSharing.share(`Punto de interés localizado en ${this.candidate.lat} - ${this.candidate.lng}`, null, this.getUrl(this.candidate), `${constants.domain}/#/candidates/${this.candidate.id}`);
       }
     });
   }

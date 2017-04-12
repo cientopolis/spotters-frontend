@@ -1,10 +1,11 @@
 import { NgModule, ErrorHandler } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import moment from 'moment';
 import 'moment/src/locale/es';
-import { Http } from '@angular/http';
-import { Storage } from '@ionic/storage';
+import { Http, HttpModule } from '@angular/http';
+import { Storage, IonicStorageModule } from '@ionic/storage';
 import { MomentModule } from 'angular2-moment';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler, DeepLinkConfig } from 'ionic-angular';
 import { AuthConfig, AuthHttp } from 'angular2-jwt';
 import { SpottersApp } from './app.component';
 import { MapPage } from '../pages/map/map';
@@ -40,19 +41,32 @@ import { WorkFlowChoice } from '../utils/choice.component';
 import { WorkFlowRadio } from '../utils/radio.component';
 import { ModalContentPage } from '../components/workflow/modal';
 
+import { Geolocation } from '@ionic-native/geolocation';
+import { SocialSharing } from '@ionic-native/social-sharing';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 moment.locale('es');
 
-let storage: Storage = new Storage();
-
-export function getAuthHttp(http) {
+export function getAuthHttp(http, storage) {
   return new AuthHttp(new AuthConfig({
     globalHeaders: [{ 'Accept': 'application/json' }],
     tokenGetter: (() => storage.get('id_token'))
   }), http);
 }
+
+export const deepLinkConfig: DeepLinkConfig = {
+    links: [
+        { component: HomePage, name: 'home' },
+        { component: MapPage, name: 'map', segment: 'map' },
+        { component: PanoramaPage, name: 'panorama', segment: 'panorama' },
+        { component: CandidatesPage, name: 'candidates', segment: 'candidates' },
+        { component: CandidatePage, name: 'candidate', segment: 'candidates/:id', defaultHistory: ['CandidatesPage'] },
+        { component: ProfilePage, name: 'profile', segment: 'profile' },
+        { component: TutorialPage, name: 'tutorial', segment: 'profile/tutorial', defaultHistory: ['ProfilePage'] },
+        { component: ExpertPage, name: 'expert', segment: 'profile/expert', defaultHistory: ['ProfilePage'] }
+      ]
+};
 
 @NgModule({
   declarations: [
@@ -79,19 +93,11 @@ export function getAuthHttp(http) {
     ModalContentPage
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     MomentModule,
-    IonicModule.forRoot(SpottersApp, {}, {
-      links: [
-        { component: HomePage, name: 'home' },
-        { component: MapPage, name: 'map', segment: 'map' },
-        { component: PanoramaPage, name: 'panorama', segment: 'panorama' },
-        { component: CandidatesPage, name: 'candidates', segment: 'candidates' },
-        { component: CandidatePage, name: 'candidate', segment: 'candidates/:id', defaultHistory: [CandidatesPage] },
-        { component: ProfilePage, name: 'profile', segment: 'profile' },
-        { component: TutorialPage, name: 'tutorial', segment: 'profile/tutorial', defaultHistory: [ProfilePage] },
-        { component: ExpertPage, name: 'expert', segment: 'profile/expert', defaultHistory: [ProfilePage] }
-      ]
-    })
+    IonicModule.forRoot(SpottersApp, {}, deepLinkConfig),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [
     IonicApp
@@ -112,6 +118,8 @@ export function getAuthHttp(http) {
   providers: [
     StatusBar,
     SplashScreen,
+    Geolocation,
+    SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     NewsProvider,
     UserProvider,
@@ -128,7 +136,7 @@ export function getAuthHttp(http) {
     {
       provide: AuthHttp,
       useFactory: getAuthHttp,
-      deps: [Http]
+      deps: [Http, Storage]
     }
   ]
 })

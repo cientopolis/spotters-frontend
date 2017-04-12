@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { Geolocation } from 'ionic-native';
+import { Geolocation } from '@ionic-native/geolocation';
 import { HomePage } from '../home/home';
 import { MapPage } from '../map/map';
 import { PanoramaPage } from '../panorama/panorama';
@@ -28,7 +28,7 @@ export class TabsPage {
   candidates: Candidate[] = []
   activeCandidates: number = 0;
 
-  constructor(private _zone: NgZone, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, private currentLocationService: CurrentLocationService) {
+  constructor(private _zone: NgZone, private configurationProvider: ConfigurationProvider, private candidatesProvider: CandidatesProvider, private currentLocationService: CurrentLocationService, private geolocation: Geolocation) {
     this.currentLocationService.candidates$.subscribe(
       c => this._zone.run(() => {
         this.candidates = c;
@@ -48,7 +48,7 @@ export class TabsPage {
       c => {
         let configuration = _.first(c);
         currentLocationService.setConfiguration(configuration);
-        Geolocation.getCurrentPosition().then((resp) => {
+        geolocation.getCurrentPosition().then((resp) => {
           let location = <Location>({
             lat: resp.coords.latitude,
             lng: resp.coords.longitude,
