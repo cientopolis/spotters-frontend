@@ -5,6 +5,8 @@ import { CandidatesPage } from '../candidates/candidates';
 import { ExpertPage } from '../expert/expert';
 import { TutorialPage } from '../tutorial/tutorial';
 import { Configuration } from '../../models/configuration';
+import { Badge } from '../../models/badge';
+import { BadgesProvider } from '../../providers/badges.provider';
 import { UserProvider } from '../../providers/user.provider';
 import { CurrentLocationService } from '../../utils/currentLocation.service';
 import _ from 'lodash';
@@ -20,8 +22,9 @@ export class ProfilePage {
   configuration: Configuration = null;
   isExpert: boolean = false;
   errorMessage: string = '';
+  badges: Badge[] = [];
 
-  constructor(public navCtrl: NavController, public auth: AuthService, private currentLocation: CurrentLocationService, private userProvider: UserProvider) {
+  constructor(public navCtrl: NavController, public auth: AuthService, private currentLocation: CurrentLocationService, private userProvider: UserProvider, private badgesProvider: BadgesProvider) {
     this.userProvider.isExpert().subscribe(
       e => this.isExpert = e,
       e => this.errorMessage = e);
@@ -43,5 +46,9 @@ export class ProfilePage {
         },
         e => console.log(e));
     });
+
+    this.badgesProvider.getAll().subscribe(
+      b => this.badges = b,
+      e => console.log(e));
   }
 }

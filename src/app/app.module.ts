@@ -17,6 +17,7 @@ import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { ExpertPage } from '../pages/expert/expert';
 import { TutorialPage } from '../pages/tutorial/tutorial';
+import { BadgesProvider } from '../providers/badges.provider';
 import { NewsProvider } from '../providers/news.provider';
 import { UserProvider } from '../providers/user.provider';
 import { ConfigurationProvider } from '../providers/configuration.provider';
@@ -121,6 +122,7 @@ export const deepLinkConfig: DeepLinkConfig = {
     Geolocation,
     SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    BadgesProvider,
     NewsProvider,
     UserProvider,
     ConfigurationProvider,
