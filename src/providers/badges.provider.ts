@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response } from '@angular/http';
+import { Headers } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Badge } from '../models/badge';
-import { User } from '../models/user';
-import { Classification } from '../models/classification';
-import { Message } from '../models/message';
-import { Vote } from '../models/vote';
-import { CurrentLocationService } from '../utils/currentLocation.service';
 import { constants } from '../app/app.constants';
 import 'rxjs/Rx';
-import _ from 'lodash';
 import { AuthHttp } from 'angular2-jwt';
 import { AuthService } from '../services/auth/auth.service';
 
@@ -30,7 +24,7 @@ export class BadgesProvider {
     return badges$;
   }
 
-  private getHeaders() {  
+  private getHeaders() {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     return headers;

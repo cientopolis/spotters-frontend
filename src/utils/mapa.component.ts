@@ -40,21 +40,21 @@ export class MapaComponent implements OnInit, OnChanges {
                 heading: this.panorama.getPov().heading,
                 pitch: this.panorama.getPov().pitch
             });
-            // if (this.location.lat !== l.lat || this.location.lng !== l.lng) {
+            if (this.location.lat !== l.lat || this.location.lng !== l.lng || this.location.heading !== l.heading || this.location.pitch !== l.pitch) {
                 this.currentLocationService.setLocation(l);
-            // }
+            }
         }
     }
 
     refreshPanorama(location: Location): void {
-        // if (this.location.lat !== location.lat || this.location.lng !== location.lng) {
+        if (this.location.lat !== location.lat || this.location.lng !== location.lng) {
             this.location = location;
             this.panorama.setPosition({ lat: this.location.lat, lng: this.location.lng });
             this.panorama.setPov({
                 heading: this.location.heading,
                 pitch: this.location.pitch
             });
-        // }
+        }
     }
 
     clearMarkers() {
@@ -78,32 +78,6 @@ export class MapaComponent implements OnInit, OnChanges {
             });
     }
 
-    addListeners() {
-        GoogleMapsLoader.load()
-            .then((_mapsApi) => {
-                if (!_.isNil(this.panorama)) {
-                    _mapsApi.event.addListener(this.panorama, 'position_changed', () => {
-                        this.updateCurrentPosition();
-                    });
-
-                    _mapsApi.event.addListener(this.panorama, 'pov_changed', () => {
-                        this.updateCurrentPosition();
-                    });
-                }
-            });
-    }
-
-    removeListeners() {
-        GoogleMapsLoader.load()
-            .then((_mapsApi) => {
-                if (!_.isNil(this.panorama)) {
-                    _mapsApi.event.clearListeners(this.panorama, 'position_changed');
-
-                    _mapsApi.event.clearListeners(this.panorama, 'pov_changed');
-                }
-            });
-    }
-
     setMap(latlng, pov) {
         GoogleMapsLoader.load()
             .then((_mapsApi) => {
@@ -113,7 +87,11 @@ export class MapaComponent implements OnInit, OnChanges {
                 }
                 this.panorama = new _mapsApi.StreetViewPanorama(document.getElementById(`streetview_${this.fix}`), panoramaProp);
 
-                this.addListeners();
+                if (_.isNil(this.candidate)) {
+                    _mapsApi.event.addListener(this.panorama, 'pov_changed', () => {
+                        this.updateCurrentPosition();
+                    });
+                }
 
                 if (!this.panoramaOnly) {
                     let mapProp = {
@@ -146,9 +124,7 @@ export class MapaComponent implements OnInit, OnChanges {
                                     pitch: this.location.pitch
                                 });
                         } else {
-                            this.removeListeners();
                             this.refreshPanorama(location);
-                            this.addListeners();
                         }
                     }
                 });
