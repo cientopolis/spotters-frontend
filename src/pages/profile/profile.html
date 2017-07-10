@@ -31,5 +31,21 @@
   <button ion-button block [navPush]="tutorialPage">Tutorial</button>
 
   <button ion-button block (click)="auth.logout()">Logout</button>
+
+  <ion-card>
+    <ion-card-header>
+      Logros Obtenidos
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item *ngFor="let badge of badges">
+        <!--<ion-avatar item-start>
+          <img src="{{badge.image_url}}">
+        </ion-avatar>-->
+        <ion-icon name="{{badge.image_url}}" item-start></ion-icon>
+        <h2>{{badge.name}}</h2>
+        <p>{{badge.description}}</p>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
   
 </ion-content>

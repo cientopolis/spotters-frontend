@@ -4,7 +4,6 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { AuthService } from '../../services/auth/auth.service';
 import { CandidatesProvider } from '../../providers/candidates.provider';
 import { Candidate } from '../../models/candidate';
-import { Classification } from '../../models/classification';
 import { Workflow } from '../../models/workflow';
 import { Task } from '../../models/task';
 import { constants } from '../../app/app.constants';
