@@ -36,7 +36,7 @@ export class ProfilePage {
       });
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.auth.lock.on('authenticated', () => {
       this.userProvider.tutorialComplete().subscribe(
         c => {
