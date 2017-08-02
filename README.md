@@ -16,7 +16,7 @@ To run the application generated you will need:
 First, the CLI tool from [Ionic Framework](https://ionicframework.com/) is needed to run this project:
 
 ```
-npm install -g ionic
+npm install -g ionic@latest
 ```
 
 Then clone or download this repository and from a terminal navigate to its directory and run:
